@@ -7,7 +7,7 @@
 
 #include "yaml-cpp/yaml.h"
 
-#include "additionalTags.h"
+#include "yntdl.h"
 
 using namespace yntdl;
 

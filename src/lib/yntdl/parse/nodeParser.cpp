@@ -8,15 +8,7 @@
 
 #include "yaml-cpp/yaml.h"
 
-#include "node.h"
-#include "iface.h"
-//#include "nodeTypeMap.h"
-#include "parserTags.h"
-#include "errorCode.h"
-#include "settingsParser.h"
-#include "topologyParser.h"
-#include "positionParser.h"
-#include "nodeParser.h"
+#include "yntdl.h"
 
 using namespace std;
 

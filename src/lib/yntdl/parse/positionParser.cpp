@@ -4,11 +4,7 @@
 
 #include "yaml-cpp/yaml.h"
 
-#include "position.h"
-#include "node.h"
-#include "topology.h"
-#include "parserTags.h"
-#include "positionParser.h"
+#include "yntdl.h"
 
 using namespace std;
 

@@ -3,7 +3,7 @@
 #include <memory>
 #include <iostream>
 
-#include "link.h"
+#include "yntdl.h"
 
 using namespace yntdl;
 

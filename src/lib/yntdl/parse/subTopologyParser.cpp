@@ -5,11 +5,7 @@
 
 #include "yaml-cpp/yaml.h"
 
-#include "parserTags.h"
-#include "errorCode.h"
-#include "topologyParser.h"
-#include "positionParser.h"
-#include "subTopologyParser.h"
+#include "yntdl.h"
 
 using namespace std;
 

@@ -2,8 +2,7 @@
 #include <iostream>
 #include <map>
 
-#include "errorCode.h"
-#include "position.h"
+#include "yntdl.h"
 
 #define PI 3.141592653
 

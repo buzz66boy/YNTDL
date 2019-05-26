@@ -12,6 +12,7 @@
 
 namespace yntdl {
 
+//errorCode.h
 enum class ErrorCode {
 //General Error Code
     NOT_ENOUGH_ARGS,
@@ -71,6 +72,7 @@ public:
     YntdlException(const YntdlException& temp): errorCode(temp.errorCode), relevantName(temp.relevantName) {}
 };
 
+//additionalTags.h
 class AdditionalTags {
 public:
     std::map<std::string, YAML::Node> additionalTags;
@@ -81,6 +83,7 @@ public:
     void mapAdditionalTags(std::vector<std::string> knownTags, YAML::Node mapRoot);
 };
 
+//nameable.h
 class Nameable {
 public:
     std::string name;
@@ -92,6 +95,7 @@ public:
 
 };
 
+//ipaddr.h
 class IpAddr {
 private:
     bool ipv4;
@@ -124,6 +128,7 @@ public:
     std::string getSubnet(IpAddr *subnetMask);
 };
 
+//position.h
 class Position {
 public:
     double x, y, z;
@@ -161,6 +166,7 @@ public:
     Position getPosition(double time);
 };
 
+//application.h
 class Application: public Nameable, public AdditionalTags {
 public:
     std::string path = "";
@@ -187,6 +193,55 @@ public:
     void addCommand(std::string cmd, bool shouldInherit = true) {commands.push_back(std::pair<std::string, bool> (cmd, shouldInherit)); }
 };
 
+//iface.h
+//Forward declarations of Node and Link for Iface objects
+class Node;
+class Link;
+class Iface : public Nameable {
+
+public:
+    yntdl::Node *node = nullptr;
+    yntdl::Link *link = nullptr;
+    std::string bridgeName;
+    std::string tapName;
+    std::string macAddr;
+
+    IpAddr *ip = nullptr;
+    IpAddr *subnetMask = nullptr;
+
+    Iface() {};
+    Iface(const Iface&);
+    Iface(std::string name): Nameable(name) {};
+    Iface(std::string name, yntdl::Node *node): Nameable(name), node(node) {};
+    ~Iface();
+
+    void assignIp(IpAddr *ipAddr);
+    void assignIp(int af, std::string ipAddr);
+
+    void assignSubnetMask(IpAddr *subnetMaskAddr);
+    void assignSubnetMask(int af, std::string subnetMaskStr);
+    void assignSubnetMask(int af, int cidr);
+};
+
+class IfaceProvider {
+protected:
+    IfaceProvider() {};
+public:
+    std::map<std::string, std::string> ifacesProvidedSubNames; //maps this level's iface names to lower level's
+    std::map<std::string, std::weak_ptr<yntdl::IfaceProvider> > ifacesProvided; //keep a ref to the providers we contain
+    virtual yntdl::Iface *getIface(std::string ifaceName);
+};
+
+class IfaceAcceptor {
+protected:
+    IfaceAcceptor() {};
+public:
+    std::map<std::string, std::string> ifacesAcceptedSubNames; //maps this level's iface names to lower level's
+    std::map<std::string, std::weak_ptr<yntdl::IfaceAcceptor> > ifacesAccepted; //keep a ref to who below us accepts ifaces
+    virtual int connectIface(std::string ifaceName, Iface *iface);
+};
+
+//link.h
 class Link : public IfaceAcceptor, public Nameable, public AdditionalTags {
 private:
     bool requiresReRef = false;
@@ -219,6 +274,7 @@ public:
     static void reRefIfaces(Link *linkPtr);
 };
 
+//node.h
 class Node : public Positionable, public IfaceProvider, public Nameable, public AdditionalTags {
 private:
     bool requiresReRef = false;
@@ -241,6 +297,7 @@ public:
     static void reRefIfaces(yntdl::Node*);
 };
 
+//topology.h
 class Topology : public Positionable, public IfaceProvider, public IfaceAcceptor, public Nameable {
 public:
     int runTime = 60;
@@ -268,9 +325,131 @@ public:
 
     static void reNumNodes(Topology*);
 };
+}; //End of yntdl namespace
 
-//Parse Functions
-
+//topologyParser.h
+class ParsedTopology {
+public:
+    yntdl::Topology topology;
+    std::map<std::string, std::shared_ptr<yntdl::Topology> > includedTopologies;
+    std::map<std::string, std::shared_ptr<yntdl::Node> > nodes;
+    std::map<std::string, std::shared_ptr<yntdl::Link> > links;
+    std::map<std::string, std::shared_ptr<yntdl::Application> > applications;
 };
+
+yntdl::Topology parseTopologyFile(std::string topPath);
+void parseTopology(YAML::Node topology, ParsedTopology *parsedTop);
+void renameSubTopologies(yntdl::Topology *topology, std::string prefix="");
+std::shared_ptr<yntdl::Node> findNode(std::vector<std::string> search, yntdl::Topology *top);
+
+//applicationParser.h
+void parseApplications(YAML::Node apps, ParsedTopology *parsedTop);
+
+//commandParser.h
+void parseCommands(YAML::Node cmds, ParsedTopology *parsedTop);
+
+//ifaceParser.h
+std::weak_ptr<yntdl::IfaceProvider> getProvider(std::string provider, yntdl::Topology *top);
+std::weak_ptr<yntdl::IfaceAcceptor> getAcceptor(std::string acceptor, yntdl::Topology *top);
+void parseIfacesProvided(YAML::Node ifaces, ParsedTopology *parsedTop);
+void parseAcceptedIfaces(YAML::Node acceptedIface, ParsedTopology *top);
+void parseIfacesAccepted(YAML::Node ifacesAccepted, ParsedTopology *parsedTop);
+
+//linkParser.h
+bool doesLinkExist(YAML::Node node, ParsedTopology *top);
+void parseLink(YAML::Node link, ParsedTopology *top);
+void overrideLink(YAML::Node link, ParsedTopology *top);
+
+//nodeParser.h
+std::vector<std::shared_ptr<yntdl::Node> > parseNode(YAML::Node node, ParsedTopology *top);
+void parseNodeApplications(YAML::Node apps, std::shared_ptr<yntdl::Node> node);
+
+//parserTags.h FIXME: Pull these tags into different file?
+// NOTE: these tags can also be used plurally (checks for tag + "s")
+#define TAG_INCLUDE "include" 
+#define TAG_TIME "time"
+#define TAG_NODE "node" 
+#define TAG_TOPOLOGY "topology"
+#define TAG_APPLICATION "application"
+#define TAG_COMMAND "command"
+#define TAG_LINK "link"
+#define TAG_BANDWIDTH "bandwidth"
+#define TAG_LATENCY "latency"
+#define TAG_POSITION "position"
+#define TAG_IFACE "iface"
+#define TAG_INTERFACE "interface"
+#define TAG_TEMPLATE "template"
+#define TAG_NUM "num"
+#define TAG_ALL "all"
+#define TAG_INHERIT "inherit"
+#define TAG_ROTATION "rotation"
+#define TAG_ACCEPT_IFACE "acceptIface"
+#define TAG_IFACES_ACCEPTED "ifacesAccepted"
+#define TAG_IFACES_PROVIDED "ifacesProvided"
+#define TAG_NAME "name"
+#define TAG_IP "ip"
+#define TAG_CIDR "cidr"
+#define TAG_SUBNET_MASK "subnetMask"
+#define TAG_TYPE "type"
+#define TAG_OFFSET "offset"
+
+//Utility functions for dealing with tags and topologies
+std::string pluralize(std::string str);
+std::vector<std::string> splitString(std::string str);
+
+//positionParser.h
+void parsePositions(YAML::Node posNode, std::shared_ptr<yntdl::Node> nodePtr);
+void parsePositions(YAML::Node posNode, yntdl::Topology *topPtr);
+void applyRotation(int rotation, yntdl::Topology *topPtr);
+void computeAbsolutePositions(yntdl::Topology *top);
+
+//settingsParser.h FIXME: Look at removing
+enum Mode {
+    NONE = 0,
+    PARSE = 1<<0,
+    NODE_GEN = 1<<1,
+    NS3_GEN = 1<<2, 
+    NS3_RUN = 1<<3,
+    CLEANUP = 1<<4,
+    NORMAL = 0xffff,
+};
+
+void create_template_settings_file(std::string settings_file);
+bool check_make_dir(const char *path);
+
+class Settings {
+public:
+    static int run_mode;
+    static bool gdb;
+    static std::string ns3_path;
+    static std::string output_dest;
+    //Location output for the topology should be saved
+    static std::string top_output_dest;
+    static std::string temp_dir;
+    static std::string container_config_dir;
+    static std::string script_dest;
+    static std::string node_type;
+
+    // static int parse_config_args();
+    static int parse_settings_file(std::string settings_file);
+
+    static bool genContainers(){ return (run_mode & Mode::NODE_GEN); }
+    static bool genNS3() { return (run_mode & Mode::NS3_GEN); }
+    static bool runNS3() { return (run_mode & Mode::NS3_RUN); }
+    static bool gdbNS3() { return gdb; }
+    static bool teardown() { return (run_mode & Mode::CLEANUP); }
+};
+
+//subTopologyParser.h
+std::vector<std::shared_ptr<yntdl::Topology> > parseSubTopology(YAML::Node node, ParsedTopology *top);
+
+//topologyPrinter.h FIXME: add logger and functions'
+/*
+void printTopology(Logger, ParsedTopology);
+void printTopology(Logger, yntdl::Topology);
+void printNode(Logger, yntdl::Node);
+void printLink(Logger, yntdl::Link);
+void printApplication(Logger, yntdl::Application);
+*/
 
 #endif

@@ -4,9 +4,7 @@
 #include <memory>
 #include <iostream>
 
-#include "ipaddr.h"
-#include "nameable.h"
-#include "iface.h"
+#include "yntdl.h"
 
 using namespace yntdl;
 

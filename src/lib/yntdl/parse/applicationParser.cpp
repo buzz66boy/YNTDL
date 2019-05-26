@@ -5,12 +5,7 @@
 
 #include "yaml-cpp/yaml.h"
 
-#include "application.h"
-#include "node.h"
-#include "topology.h"
-#include "errorCode.h"
-#include "parserTags.h"
-#include "applicationParser.h"
+#include "yntdl.h"
 
 using namespace std;
 

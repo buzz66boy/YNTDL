@@ -4,7 +4,7 @@
 
 #include <arpa/inet.h>
 
-#include "ipaddr.h"
+#include "yntdl.h"
 
 using namespace yntdl;
 

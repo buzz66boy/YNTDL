@@ -6,9 +6,7 @@
 
 #include "yaml-cpp/yaml.h"
 
-#include "parserTags.h"
-#include "errorCode.h"
-#include "ifaceParser.h"
+#include "yntdl.h"
 
 using namespace std;
 

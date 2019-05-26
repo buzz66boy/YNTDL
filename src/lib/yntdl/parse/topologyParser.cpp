@@ -11,28 +11,14 @@
 
 #include "yaml-cpp/yaml.h"
 
-#include "topology.h"
-#include "node.h"
-#include "link.h"
-#include "iface.h"
-#include "position.h"
-#include "parserTags.h"
-#include "errorCode.h"
-#include "nodeParser.h"
-#include "linkParser.h"
-#include "ifaceParser.h"
-#include "positionParser.h"
-#include "applicationParser.h"
-#include "commandParser.h"
-#include "subTopologyParser.h"
-#include "topologyParser.h"
+#include "yntdl.h"
 
 using namespace std;
 
 static void parseIncludes(YAML::Node includes, std::string topPath, ParsedTopology *parsedTop);
 static void parseNodes(YAML::Node nodes, ParsedTopology *parsedTop);
 static void parseLinks(YAML::Node links, ParsedTopology *parsedTop);
-static void parseSubTopologies(YAML::Node topologies, ParsedTopology *parsedTop);\
+static void parseSubTopologies(YAML::Node topologies, ParsedTopology *parsedTop);
 
 yntdl::Topology parseTopologyFile(std::string topPath){	
 	ParsedTopology parsedTop;

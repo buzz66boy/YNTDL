@@ -2,10 +2,7 @@
 #include <memory>
 #include <iostream>
 
-#include "errorCode.h"
-#include "ifaceParser.h"
-#include "node.h"
-#include "topology.h"
+#include "yntdl.h"
 
 using namespace yntdl;
 

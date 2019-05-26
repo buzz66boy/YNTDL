@@ -6,15 +6,7 @@
 
 #include "yaml-cpp/yaml.h"
 
-#include "ipaddr.h"
-//#include "linkTypeMap.h"
-#include "parserTags.h"
-#include "topologyParser.h"
-#include "link.h"
-#include "topology.h"
-#include "errorCode.h"
-#include "ifaceParser.h"
-#include "linkParser.h"
+#include "yntdl.h"
 
 using namespace std;
 

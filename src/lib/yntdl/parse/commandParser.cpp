@@ -4,13 +4,7 @@
 
 #include "yaml-cpp/yaml.h"
 
-#include "errorCode.h"
-#include "node.h"
-#include "application.h"
-#include "topology.h"
-#include "parserTags.h"
-#include "topologyParser.h"
-#include "commandParser.h"
+#include "yntdl.h"
 
 using namespace std;
 

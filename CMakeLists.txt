@@ -19,15 +19,6 @@ include_directories(
 )
 
 add_library(yntdl SHARED
-		src/lib/yntdl/objects/include/ipaddr.h
-		src/lib/yntdl/objects/include/node.h
-		src/lib/yntdl/objects/include/iface.h
-		src/lib/yntdl/objects/include/position.h
-		src/lib/yntdl/objects/include/link.h
-		src/lib/yntdl/objects/include/topology.h
-		src/lib/yntdl/objects/include/application.h
-        src/lib/yntdl/objects/include/nameable.h
-        src/lib/yntdl/objects/include/additionalTags.h
 		src/lib/yntdl/objects/ipaddr.cpp
         src/lib/yntdl/objects/node.cpp
 		src/lib/yntdl/objects/link.cpp
@@ -36,16 +27,6 @@ add_library(yntdl SHARED
         src/lib/yntdl/objects/application.cpp
         src/lib/yntdl/objects/position.cpp
         src/lib/yntdl/objects/additionalTags.cpp
-        src/lib/yntdl/parse/include/parserTags.h
-        src/lib/yntdl/parse/include/settingsParser.h
-        src/lib/yntdl/parse/include/topologyParser.h
-        src/lib/yntdl/parse/include/subTopologyParser.h
-        src/lib/yntdl/parse/include/nodeParser.h
-        src/lib/yntdl/parse/include/linkParser.h
-        src/lib/yntdl/parse/include/ifaceParser.h
-        src/lib/yntdl/parse/include/positionParser.h
-        src/lib/yntdl/parse/include/applicationParser.h
-        src/lib/yntdl/parse/include/commandParser.h
         src/lib/yntdl/parse/parserTags.cpp
         src/lib/yntdl/parse/topologyParser.cpp
         src/lib/yntdl/parse/subTopologyParser.cpp
@@ -61,7 +42,8 @@ add_library(yntdl SHARED
 set_target_properties(yntdl PROPERTIES 
 	VERSION ${PROJECT_VERSION}
 	SOVERSION 1
-	PUBLIC_HEADER include/yntdl.h)
+	PUBLIC_HEADER src/lib/yntdl/include/yntdl.h
+)
 
 find_library(YAML_LIB yaml-cpp)
 
@@ -71,4 +53,5 @@ target_compile_options(yntdl PUBLIC -std=c++11 -pthread -g -Wfatal-errors -pipe)
 
 install(TARGETS yntdl
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)

@@ -5,9 +5,7 @@
 #include <iostream>
 #include <algorithm>
 
-#include "errorCode.h"
-#include "link.h"
-#include "node.h"
+#include "yntdl.h"
 
 using namespace yntdl;
 
