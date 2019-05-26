@@ -10,6 +10,7 @@ YNTDL describes networks in terms of:
 - interfaces: connects to one link, assigned an IP address (later adding mac addresses)
 - nodes: has associated physical position, applications, and n interfaces
 - applications: exist on associated nodes
+
 These four objects are combined to form a network topology. A network topology can also consist of multiple other network topologies (subtopologies).
 
 ## Scalability
