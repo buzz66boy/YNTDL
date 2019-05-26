@@ -51,7 +51,7 @@ static void parseCommandMap(YAML::Node cmds, ParsedTopology *parsedTop, bool inh
                         }
                     }
                     if(!appFound){
-                        throw Ns3lxcException(ErrorCode::APP_NOT_FOUND, appName + " on " + nodePtr->name);
+                        throw yntdl::YntdlException(yntdl::ErrorCode::APP_NOT_FOUND, appName + " on " + nodePtr->name);
                     }
                 }
                 break;

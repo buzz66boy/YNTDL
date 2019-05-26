@@ -49,11 +49,11 @@ void parseLink(YAML::Node node, ParsedTopology *top){
         recognizedTags.push_back(TAG_TYPE);
         link->setType(node[TAG_TYPE].as<std::string>());
 /*        if(linkTypeMap.count(link->getType()) < 1){
-            throw Ns3lxcException(ErrorCode::LINK_TYPE_NOT_FOUND, name);
+            throw yntdl::YntdlException(yntdl::ErrorCode::LINK_TYPE_NOT_FOUND, name);
         }
 */
     } else {
-        throw Ns3lxcException(ErrorCode::LINK_TYPE_NOT_SPECIFIED, name);
+        throw yntdl::YntdlException(yntdl::ErrorCode::LINK_TYPE_NOT_SPECIFIED, name);
     }
     yntdl::IpAddr subnetMask(AF_INET, "255.255.255.0");
     if(node[TAG_CIDR]){
@@ -104,7 +104,7 @@ void parseLink(YAML::Node node, ParsedTopology *top){
             shared_ptr<yntdl::IfaceProvider> provPtr = getProvider(split[0], &top->topology).lock();
             yntdl::Iface *ifacePtr = provPtr->getIface(split[1]);
             if(!ifacePtr){
-                throw Ns3lxcException(ErrorCode::IFACE_NOT_FOUND, split[1]);
+                throw yntdl::YntdlException(yntdl::ErrorCode::IFACE_NOT_FOUND, split[1]);
             }
             link->connectIface(ifacePtr);
             if(split.size() > 2){

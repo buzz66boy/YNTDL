@@ -60,7 +60,7 @@ add_library(yntdl SHARED
 
 set_target_properties(yntdl PROPERTIES 
 	VERSION ${PROJECT_VERSION}
-	SOVERSION 1)
+	SOVERSION 1
 	PUBLIC_HEADER include/yntdl.h)
 
 find_library(YAML_LIB yaml-cpp)

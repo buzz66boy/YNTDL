@@ -63,5 +63,5 @@ Iface *yntdl::Node::getIface(std::string ifaceName){
     if(ifaces.count(ifaceName) > 0){
         return &ifaces[ifaceName];
     }
-    throw Ns3lxcException(ErrorCode::IFACE_NOT_FOUND, ifaceName + " on Node " + name);
+    throw yntdl::YntdlException(yntdl::ErrorCode::IFACE_NOT_FOUND, ifaceName + " on Node " + name);
 }

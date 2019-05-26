@@ -143,7 +143,7 @@ std::vector<std::shared_ptr<yntdl::Node> > parseNode(YAML::Node node, ParsedTopo
             nodePtr->type = Settings::node_type;
         }
 /*        if(nodeTypeMap.count(nodePtr->type) < 1){
-            throw Ns3lxcException(ErrorCode::NODE_TYPE_NOT_FOUND, origName + " " + nodePtr->type);
+            throw yntdl::YntdlException(yntdl::ErrorCode::NODE_TYPE_NOT_FOUND, origName + " " + nodePtr->type);
         }
 */
         if(node[TAG_POSITION]){

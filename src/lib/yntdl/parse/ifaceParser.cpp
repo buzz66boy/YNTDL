@@ -18,7 +18,7 @@ std::weak_ptr<yntdl::IfaceProvider> getProvider(string provider, yntdl::Topology
     } else if(top->topMap.count(provider) > 0){
         return top->topMap[provider];
     } else {
-        throw Ns3lxcException(ErrorCode::PROVIDER_NOT_FOUND, provider);
+        throw yntdl::YntdlException(yntdl::ErrorCode::PROVIDER_NOT_FOUND, provider);
     }
 }
 
@@ -28,7 +28,7 @@ std::weak_ptr<yntdl::IfaceAcceptor> getAcceptor(string acceptor, yntdl::Topology
         } else if(top->linkMap.count(acceptor) > 0){
             return top->linkMap[acceptor];
         } else {
-            throw Ns3lxcException(ErrorCode::ACCEPTOR_NOT_FOUND, acceptor);
+            throw yntdl::YntdlException(yntdl::ErrorCode::ACCEPTOR_NOT_FOUND, acceptor);
         }
 }
 
@@ -55,7 +55,7 @@ void parseAcceptedIfaces(YAML::Node acceptedIface, ParsedTopology *parsedTop){
 
         yntdl::Iface *iface = provPtr->getIface(provideSplit[1]);
         if(provideSplit.size() < 3){
-            throw Ns3lxcException(ErrorCode::NO_IP, provider);
+            throw yntdl::YntdlException(yntdl::ErrorCode::NO_IP, provider);
         } else {
             iface->assignIp(AF_INET, provideSplit[2]);   
         }

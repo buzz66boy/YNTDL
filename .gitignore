@@ -1,5 +1,6 @@
 temp/*
 *.o
+*.so*
 bin/*
 *.cmake
 CMakeCache.txt

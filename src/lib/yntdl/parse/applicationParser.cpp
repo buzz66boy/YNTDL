@@ -65,7 +65,7 @@ static void parseMappedApplication(YAML::Node mapNode, string appName, ParsedTop
         addAppToAllNodes(&app, &parsedTop->topology);
     }
     if(!mapNode[TAG_NODE] && !mapNode[pluralize(TAG_NODE)] && !mapNode[TAG_ALL]){
-        throw Ns3lxcException(ErrorCode::NODE_NOT_SPECIFIED, appName);
+        throw yntdl::YntdlException(yntdl::ErrorCode::NODE_NOT_SPECIFIED, appName);
     }
     bool inherit = true;
     if(mapNode[TAG_INHERIT]){

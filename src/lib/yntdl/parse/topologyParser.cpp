@@ -161,7 +161,7 @@ static void parseIncludes(YAML::Node includes, std::string topPath, ParsedTopolo
             if(stat(searchPath.c_str(), &buffer) == 0 && !S_ISDIR(buffer.st_mode)){
                 includedTop = shared_ptr<yntdl::Topology>(new yntdl::Topology(parseTopologyFile(searchPath)));
             } else {
-                throw Ns3lxcException(ErrorCode::FILE_NOT_FOUND, curInclude);
+                throw yntdl::YntdlException(yntdl::ErrorCode::FILE_NOT_FOUND, curInclude);
             }
         }
 
@@ -182,7 +182,7 @@ static void parseIncludes(YAML::Node includes, std::string topPath, ParsedTopolo
     			if(stat(searchPath.c_str(), &buffer) == 0 && !S_ISDIR(buffer.st_mode)){
     				includedTop = shared_ptr<yntdl::Topology>(new yntdl::Topology(parseTopologyFile(searchPath)));
     			} else {
-                    throw Ns3lxcException(ErrorCode::FILE_NOT_FOUND, curInclude);
+                    throw yntdl::YntdlException(yntdl::ErrorCode::FILE_NOT_FOUND, curInclude);
     			}
     		}
 
@@ -230,7 +230,7 @@ static void parseLinks(YAML::Node links, ParsedTopology *parsedTop){
 
 shared_ptr<yntdl::Node> findNode(vector<string> search, yntdl::Topology *top){
 	if(search.size() < 1){
-		throw Ns3lxcException(ErrorCode::NODE_NOT_FOUND, " find node");
+		throw yntdl::YntdlException(yntdl::ErrorCode::NODE_NOT_FOUND, " find node");
 	}
 	if(top->topMap.count(search[0]) > 0){
 		shared_ptr<yntdl::Topology> topPtr = top->topMap.at(search[0]);
@@ -239,7 +239,7 @@ shared_ptr<yntdl::Node> findNode(vector<string> search, yntdl::Topology *top){
 	} else if(top->nodeMap.count(search[0]) > 0){
 		return top->nodeMap.at(search[0]);
 	} else {
-		throw Ns3lxcException(ErrorCode::NODE_NOT_FOUND, search[0]);
+		throw yntdl::YntdlException(yntdl::ErrorCode::NODE_NOT_FOUND, search[0]);
 	}
 }
 

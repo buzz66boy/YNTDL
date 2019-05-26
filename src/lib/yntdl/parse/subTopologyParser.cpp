@@ -51,7 +51,7 @@ std::vector<std::shared_ptr<yntdl::Topology> > parseSubTopology(YAML::Node node,
             if(top->includedTopologies.count(templateName) > 0){
                 topPtr = make_shared<yntdl::Topology>(top->includedTopologies[templateName], name);
             } else {
-                throw Ns3lxcException(ErrorCode::TEMPLATE_NOT_FOUND, templateName);
+                throw yntdl::YntdlException(yntdl::ErrorCode::TEMPLATE_NOT_FOUND, templateName);
             }
             if(node[TAG_OFFSET] || node[pluralize(TAG_OFFSET)]){
                 YAML::Node offsetNode = (node[TAG_OFFSET]) ? node[TAG_OFFSET] : node[pluralize(TAG_OFFSET)]; 

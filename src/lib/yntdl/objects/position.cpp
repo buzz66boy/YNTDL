@@ -134,7 +134,7 @@ static Position getPos(double time, std::vector<Position> positions){
         return position;
     }
 
-    throw Ns3lxcException(ErrorCode::POSITION_ERROR, std::to_string(time));
+    throw yntdl::YntdlException(yntdl::ErrorCode::POSITION_ERROR, std::to_string(time));
 
 }
 

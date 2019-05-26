@@ -4,6 +4,8 @@
 #include <exception>
 #include <string>
 
+namespace yntdl {
+
 enum class ErrorCode {
 //General Error Code
     NOT_ENOUGH_ARGS,
@@ -52,15 +54,16 @@ enum class ErrorCode {
     NS3_RUN_FAILURE,
 };
 
-class Ns3lxcException : public std::exception {
+class YntdlException : public std::exception {
 private:
     ErrorCode errorCode;
     std::string relevantName;
 public:
-    Ns3lxcException(ErrorCode ec, std::string relName): errorCode(ec), relevantName(relName) {};
+    YntdlException(ErrorCode ec, std::string relName): errorCode(ec), relevantName(relName) {};
     virtual const char* what() const throw();
 
-    Ns3lxcException(const Ns3lxcException& temp): errorCode(temp.errorCode), relevantName(temp.relevantName) {}
+    YntdlException(const yntdl::YntdlException& temp): errorCode(temp.errorCode), relevantName(temp.relevantName) {}
+};
 };
 
 #endif
