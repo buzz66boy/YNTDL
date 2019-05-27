@@ -5,19 +5,15 @@ project(yntdl1 VERSION 0.1.0)
 
 message(Building)
 
-#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "bin")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "output")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "output/libyntdl")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 include(GNUInstallDirs)
 
-include_directories(
-        /usr/src/linux-headers-generic/
-        /usr/include
-        src/yntdl/include
-)
-
 add_library(yntdl SHARED
+        src/yntdl/include/yntdl.h
         src/yntdl/core/errorCode.cpp
 		src/yntdl/objects/ipaddr.cpp
         src/yntdl/objects/node.cpp
@@ -47,6 +43,12 @@ set_target_properties(yntdl PROPERTIES
 	PUBLIC_HEADER src/yntdl/include/yntdl.h
 )
 
+target_include_directories(yntdl PRIVATE
+        /usr/src/linux-headers-generic/
+        /usr/include
+        src/yntdl/include
+)
+
 find_library(YAML_LIB yaml-cpp)
 
 target_link_libraries(yntdl ${YAML_LIB})
@@ -55,3 +57,12 @@ install(TARGETS yntdl
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
+
+set(Tester
+    src/libtest/main.cpp
+)
+
+add_executable(yntdl_tester ${Tester})
+target_compile_options(yntdl_tester PUBLIC -std=c++11 -pthread -g -Wfatal-errors -pipe)
+find_library(YNTDL_LIB yntdl)
+target_link_libraries(yntdl_tester ${YNTDL_LIB})

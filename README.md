@@ -35,10 +35,17 @@ Note: Tested with libyaml-cpp-dev and yaml-cpp release v0.6
 After installing dependencies, from the main git directory:
 ```bash
 cmake .
-make
-sudo make install
+make yntdl
+sudo make install/fast
 ```
-This will install the yntdl shared library on your system for other programs to use.
+This will install the yntdl shared library on your system for other programs to use. Note: running `sudo make install` without the fast option will fail due to it building the tester before the library is installed.
+
+### Testing
+After installing, it is prudent to test linking to the library.
+```bash
+make yntdl_tester
+output/yntdl_tester
+```
 
 # Pronunciation
 Should this "language" be adopted by a substantial following, it is important that the calamity of the word "gif" not be repeated. You may pronounce this language's name/abbreviation as you like, "Entitle", "En-tidal", "Young-teedle", have at it.
