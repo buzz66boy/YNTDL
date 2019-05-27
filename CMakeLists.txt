@@ -43,7 +43,7 @@ target_compile_options(yntdl PUBLIC -std=c++11 -pthread -g -Wfatal-errors -pipe)
 set_target_properties(yntdl PROPERTIES 
 	VERSION ${PROJECT_VERSION}
 	SOVERSION 1
-	PUBLIC_HEADER src/lib/yntdl/include/yntdl.h
+	PUBLIC_HEADER src/yntdl/include/yntdl.h
 )
 
 find_library(YAML_LIB yaml-cpp)
