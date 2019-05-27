@@ -18,6 +18,7 @@ include_directories(
 )
 
 add_library(yntdl SHARED
+        src/yntdl/core/errorCode.cpp
 		src/yntdl/objects/ipaddr.cpp
         src/yntdl/objects/node.cpp
 		src/yntdl/objects/link.cpp
