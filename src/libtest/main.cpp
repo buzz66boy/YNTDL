@@ -7,4 +7,5 @@ using namespace std;
 
 int main() {
     cout << "it worked!" << endl;
+    yntdl::Node node();
 }
