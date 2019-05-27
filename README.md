@@ -22,14 +22,23 @@ The true power of YNTDL is the ability to instantiate network topologies inside 
 # Setup
 ## Dependencies
 - yaml-cpp - libyaml-cpp-dev
-
+Note: Tested with libyaml-cpp-dev and yaml-cpp release v0.6
 - CMake - cmake
 
 - GCC - gcc
 
 ### YAML
-- Download yaml-cpp (libyaml-cpp-dev) and follow the install instructions.
-- You may have to download and install the Boost libraries as well (libboost-dev).
+- Either `sudo apt install libyaml-cpp-dev` or
+- Download yaml-cpp (release v0.6) and follow the install instructions.
+
+### Make and Install
+After installing dependencies, from the main git directory:
+```bash
+cmake .
+make
+sudo make install
+```
+This will install the yntdl shared library on your system for other programs to use.
 
 # Pronunciation
 Should this "language" be adopted by a substantial following, it is important that the calamity of the word "gif" not be repeated. You may pronounce this language's name/abbreviation as you like, "Entitle", "En-tidal", "Young-teedle", have at it.
