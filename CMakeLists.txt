@@ -26,7 +26,6 @@ add_library(yntdl SHARED
         src/yntdl/parse/parserTags.cpp
         src/yntdl/parse/topologyParser.cpp
         src/yntdl/parse/subTopologyParser.cpp
-        src/yntdl/parse/settingsParser.cpp
         src/yntdl/parse/nodeParser.cpp
         src/yntdl/parse/linkParser.cpp
         src/yntdl/parse/ifaceParser.cpp

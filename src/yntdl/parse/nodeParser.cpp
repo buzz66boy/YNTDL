@@ -131,10 +131,10 @@ std::vector<std::shared_ptr<yntdl::Node> > parseNode(YAML::Node node, ParsedTopo
         if(node[TAG_TYPE]){
             recognizedTags.push_back(TAG_TYPE);
             nodePtr->type = node[TAG_TYPE].as<string>();
-        } else {
+        }/* else {
             nodePtr->type = Settings::node_type;
         }
-/*        if(nodeTypeMap.count(nodePtr->type) < 1){
+        if(nodeTypeMap.count(nodePtr->type) < 1){
             throw yntdl::YntdlException(yntdl::ErrorCode::NODE_TYPE_NOT_FOUND, origName + " " + nodePtr->type);
         }
 */
