@@ -32,6 +32,9 @@ add_library(yntdl SHARED
         src/yntdl/parse/positionParser.cpp
         src/yntdl/parse/applicationParser.cpp
         src/yntdl/parse/commandParser.cpp
+        src/yntdl/validation/linkValidator.cpp
+        src/yntdl/validation/nodeValidator.cpp
+        src/yntdl/validation/topologyValidator.cpp
 )
 
 target_compile_options(yntdl PUBLIC -std=c++11 -pthread -g -Wfatal-errors -pipe)

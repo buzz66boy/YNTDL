@@ -5,6 +5,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <memory>
 #include <cstdint>
 #include <arpa/inet.h>
 
@@ -15,13 +16,7 @@ namespace yntdl {
 //errorCode.h
 enum class ErrorCode {
 //General Error Code
-    NOT_ENOUGH_ARGS,
-    NO_FILE_PROVIDED,
-    RUN_AS_ROOT,
-    FOLDER_NOT_FOUND,
-    FOLDER_NOT_CREATED,
     FILE_NOT_FOUND,
-    SETTINGS_ATTR_NOT_FOUND,
 //Parse Error Codes
     //GENERAL
     TEMPLATE_NOT_FOUND,
@@ -49,16 +44,6 @@ enum class ErrorCode {
     LINK_INVALID,
     NODE_INVALID,
     APP_INVALID,
-//Generation Error Codes
-    BR_CREATE_FAILURE,
-    TAP_CREATE_FAILURE,
-    NODE_CREATE_FAILURE,
-    NODE_START_FAILURE,
-    NODE_TEARDOWN_FAILURE,
-    APP_INSTALL_FAILURE,
-    APP_RUN_FAILURE,
-    NS3_WRITE_FAILURE,
-    NS3_RUN_FAILURE,
 };
 
 class YntdlException : public std::exception {
@@ -325,6 +310,16 @@ public:
 
     static void reNumNodes(Topology*);
 };
+
+//linkValidator.h
+void validateLink(std::shared_ptr<yntdl::Link> linkPtr);
+
+//nodeValidator.h
+void validateNode(std::shared_ptr<yntdl::Node> nodePtr);
+
+//topologyValidator.h
+void validateTopology(yntdl::Topology *top);
+
 }; //End of yntdl namespace
 
 //topologyParser.h

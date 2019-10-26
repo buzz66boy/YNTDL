@@ -8,26 +8,8 @@ using namespace std;
 const char* yntdl::YntdlException::what() const throw() {
     string errStr = "";
     switch(errorCode){
-        case(ErrorCode::NOT_ENOUGH_ARGS):
-            errStr = "Not enough arguments: ";
-            break;
-        case(ErrorCode::NO_FILE_PROVIDED):
-            errStr = "No file provided";
-            break;
-        case(ErrorCode::RUN_AS_ROOT):
-            errStr = "Must run with root privileges (sudo)";
-            break;
-        case(ErrorCode::FOLDER_NOT_FOUND):
-            errStr = "Folder not found: ";
-            break;
-        case(ErrorCode::FOLDER_NOT_CREATED):
-            errStr = "Folder not created: ";
-            break;
         case(ErrorCode::FILE_NOT_FOUND):
             errStr = "File not found: ";
-            break;
-        case(ErrorCode::SETTINGS_ATTR_NOT_FOUND):
-            errStr = "Settings attribute not found/set: ";
             break;
         //Parse Error Codes
         //GENERAL
@@ -93,34 +75,6 @@ const char* yntdl::YntdlException::what() const throw() {
             break;
         case(ErrorCode::APP_INVALID):
             errStr = "Invalid Application: ";
-            break;
-        //Generation Error Codes
-        case(ErrorCode::BR_CREATE_FAILURE):
-            errStr = "Failed to create bridge: ";
-            break;
-        case(ErrorCode::TAP_CREATE_FAILURE):
-            errStr = "Failed to create tap: ";
-            break;
-        case(ErrorCode::NODE_CREATE_FAILURE):
-            errStr = "Failed to create Node: ";
-            break;
-        case(ErrorCode::NODE_START_FAILURE):
-            errStr = "Failed to start Node: ";
-            break;
-        case(ErrorCode::NODE_TEARDOWN_FAILURE):
-            errStr = "Failed to teardown Node: ";
-            break;
-        case(ErrorCode::APP_INSTALL_FAILURE):
-            errStr = "Failed to install Application: ";
-            break;
-        case(ErrorCode::APP_RUN_FAILURE):
-            errStr = "Failed to run Application: ";
-            break;
-        case(ErrorCode::NS3_WRITE_FAILURE):
-            errStr = "Error in writing ns-3 script: ";
-            break;
-        case(ErrorCode::NS3_RUN_FAILURE):
-            errStr = "Failed to run ns-3: ";
             break;
         default:
             errStr = "Error: ";
