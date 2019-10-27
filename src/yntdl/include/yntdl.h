@@ -67,7 +67,7 @@ public:
      **/
     void mapAdditionalTags(std::vector<std::string> knownTags, YAML::Node mapRoot);
 
-    AdditionalTags() {}
+    AdditionalTags(): additionalTags() {}
     AdditionalTags(const AdditionalTags& temp): additionalTags(temp.additionalTags) {}
 };
 
