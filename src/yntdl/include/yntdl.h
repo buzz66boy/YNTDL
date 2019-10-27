@@ -39,7 +39,7 @@ enum class ErrorCode {
     ACCEPTOR_NOT_FOUND,
     PROVIDER_NOT_FOUND,
     NO_IP,
-//Validation Error Codes
+    //Validation Error Codes
     TOPOLOGY_INVALID,
     LINK_INVALID,
     NODE_INVALID,
@@ -66,6 +66,9 @@ public:
      * Adds unrecognized tags to the additionalTags map
      **/
     void mapAdditionalTags(std::vector<std::string> knownTags, YAML::Node mapRoot);
+
+    AdditionalTags() {}
+    AdditionalTags(const AdditionalTags& temp): additionalTags(temp.additionalTags) {}
 };
 
 //nameable.h
@@ -283,10 +286,9 @@ public:
 };
 
 //topology.h
-class Topology : public Positionable, public IfaceProvider, public IfaceAcceptor, public Nameable {
+class Topology : public Positionable, public IfaceProvider, public IfaceAcceptor, public Nameable, public AdditionalTags {
 public:
-    int runTime = 60;
-    //std::string name = "";
+    //int runTime = 60;
     int curNodeNum = 0;
 
     IpAddr *ip = nullptr;
@@ -362,7 +364,7 @@ void parseNodeApplications(YAML::Node apps, std::shared_ptr<yntdl::Node> node);
 //parserTags.h FIXME: Pull these tags into different file?
 // NOTE: these tags can also be used plurally (checks for tag + "s")
 #define TAG_INCLUDE "include" 
-#define TAG_TIME "time"
+//#define TAG_TIME "time"
 #define TAG_NODE "node" 
 #define TAG_TOPOLOGY "topology"
 #define TAG_APPLICATION "application"

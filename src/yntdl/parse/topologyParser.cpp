@@ -33,9 +33,9 @@ yntdl::Topology parseTopologyFile(std::string topPath){
 		parseIncludes(topology[pluralize(TAG_INCLUDE)], topPath, &parsedTop);
 	}
 
-	if(topology[TAG_TIME]){
-		parsedTop.topology.runTime = topology[TAG_TIME].as<int>();
-	}
+	// if(topology[TAG_TIME]){
+	// 	parsedTop.topology.runTime = topology[TAG_TIME].as<int>();
+	// }
 
 	std::string topName = topPath.substr(topPath.find_last_of("\\/") + 1, topPath.find_last_of(".yaml") - topPath.find_last_of("\\/") - 5);
     bool topFound = false;
@@ -69,60 +69,79 @@ yntdl::Topology parseTopologyFile(std::string topPath){
 void parseTopology(YAML::Node topology, ParsedTopology *parsedTop){
 	
 	cout << "PARSING TOPOLOGY " << parsedTop->topology.name << endl;
+    vector<string> recognizedTags;
 
 	if(topology[TAG_NODE]){
+        recognizedTags.push_back(TAG_NODE);
 		parseNodes(topology[TAG_NODE], parsedTop);
 	} else if (topology[pluralize(TAG_NODE)]) {
+        recognizedTags.push_back(pluralize(TAG_NODE));
 		parseNodes(topology[pluralize(TAG_NODE)], parsedTop);
 	}
 	if(topology[TAG_TOPOLOGY]){
+        recognizedTags.push_back(TAG_TOPOLOGY);
 		parseSubTopologies(topology[TAG_TOPOLOGY], parsedTop);
 	} else if (topology[pluralize(TAG_TOPOLOGY)]) {
+        recognizedTags.push_back(pluralize(TAG_TOPOLOGY));
 		parseSubTopologies(topology[pluralize(TAG_TOPOLOGY)], parsedTop);
 	}
 
 	if(topology[TAG_LINK]){
+        recognizedTags.push_back(TAG_LINK);
 		parseLinks(topology[TAG_LINK], parsedTop);
 	} else if (topology[pluralize(TAG_LINK)]){
+        recognizedTags.push_back(pluralize(TAG_LINK));
 		parseLinks(topology[pluralize(TAG_LINK)], parsedTop);
 	}
 
     if(topology[TAG_ACCEPT_IFACE]){
+        recognizedTags.push_back(TAG_ACCEPT_IFACE);
         parseAcceptedIfaces(topology[TAG_ACCEPT_IFACE], parsedTop);
     } else if (topology[pluralize(TAG_ACCEPT_IFACE)]){
+        recognizedTags.push_back(pluralize(TAG_ACCEPT_IFACE));
         parseAcceptedIfaces(topology[pluralize(TAG_ACCEPT_IFACE)], parsedTop);
     }
 
 	if(topology[TAG_IFACES_PROVIDED]){
+        recognizedTags.push_back(TAG_IFACES_PROVIDED);
 		parseIfacesProvided(topology[TAG_IFACES_PROVIDED], parsedTop);
 	}
 
 	if(topology[TAG_IFACES_ACCEPTED]){
+        recognizedTags.push_back(TAG_IFACES_ACCEPTED);
 		parseIfacesAccepted(topology[TAG_IFACES_ACCEPTED], parsedTop);
 	}
 
     if(topology[TAG_POSITION]){
+        recognizedTags.push_back(TAG_POSITION);
         parsePositions(topology[TAG_POSITION], &parsedTop->topology);
     } else if (topology[pluralize(TAG_POSITION)]){
+        recognizedTags.push_back(pluralize(TAG_POSITION));
         parsePositions(topology[pluralize(TAG_POSITION)], &parsedTop->topology);
     }
 
     if(topology[TAG_ROTATION].Type() == YAML::NodeType::Scalar){
+        recognizedTags.push_back(TAG_ROTATION);
         applyRotation(topology[TAG_ROTATION].as<int>(), &parsedTop->topology);
     }
 
 	if(topology[TAG_APPLICATION]){
+        recognizedTags.push_back(TAG_APPLICATION);
         parseApplications(topology[TAG_APPLICATION], parsedTop);
     } else if (topology[pluralize(TAG_APPLICATION)]){
+        recognizedTags.push_back(pluralize(TAG_APPLICATION));
         parseApplications(topology[pluralize(TAG_APPLICATION)], parsedTop);
     }
 
     if(topology[TAG_COMMAND]){
+        recognizedTags.push_back(TAG_COMMAND);
         parseCommands(topology[TAG_COMMAND], parsedTop);
     } else if(topology[pluralize(TAG_COMMAND)]){
+        recognizedTags.push_back(pluralize(TAG_COMMAND));
         parseCommands(topology[pluralize(TAG_COMMAND)], parsedTop);
     }
 
+    parsedTop->topology.mapAdditionalTags(recognizedTags, topology);
     computeAbsolutePositions(&parsedTop->topology);
 	cout << "DONE PARSING TOP " << parsedTop->topology.name << endl;
 

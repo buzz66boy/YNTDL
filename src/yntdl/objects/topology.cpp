@@ -45,7 +45,7 @@ static yntdl::Node *findNode(Topology *top, std::string nodeName){
     return nullptr;
 }
 
-Topology::Topology(Topology *temp): Nameable(*temp), Positionable(*temp) {
+Topology::Topology(Topology *temp): Nameable(*temp), Positionable(*temp), AdditionalTags(*temp) {
     size_t i;
     // std::cout << "COPYING " << temp->name << std::endl;
     for(i = 0; i < temp->subTopologies.size(); ++i){
@@ -147,9 +147,9 @@ Topology::Topology(Topology *temp): Nameable(*temp), Positionable(*temp) {
     curNodeNum = temp->curNodeNum;
 }
 
-Topology::Topology(const Topology& temp): Positionable(temp), Nameable(temp) {
+Topology::Topology(const Topology& temp): Positionable(temp), Nameable(temp), AdditionalTags(temp) {
     size_t i;
-    runTime = temp.runTime;
+    // runTime = temp.runTime;
     subTopologies = temp.subTopologies;
     nodes = temp.nodes;
     links = temp.links;
