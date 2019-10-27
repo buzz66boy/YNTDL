@@ -15,11 +15,13 @@ void parsePositions(YAML::Node posNode, std::shared_ptr<yntdl::Node> nodePtr){
     if(posNode.Type() == YAML::NodeType::Scalar){
         vector<string> xyz = splitString(posNode.as<string>());
         nodePtr->positions.push_back(yntdl::Position(0, stod(xyz[0]), stod(xyz[1]), stod(xyz[2])));
+        //cout << "\tAdded " + posNode.as<string>() << endl;
     } else if(posNode.begin()->second.Type() == YAML::NodeType::Scalar){
         for(auto iter : posNode){
             double time = iter.first.as<double>();
             vector<string> xyz = splitString(iter.second.as<string>());
             nodePtr->positions.push_back(yntdl::Position(time, stod(xyz[0]), stod(xyz[1]), stod(xyz[2])));
+            //cout << "\tAdded " + iter.second.as<string>() << endl;
         }
     }
 }
@@ -31,13 +33,13 @@ void parsePositions(YAML::Node posNode, yntdl::Topology *topPtr){
     if(posNode.Type() == YAML::NodeType::Scalar){
         vector<string> xyz = splitString(posNode.as<string>());
         topPtr->positions.push_back(yntdl::Position(0, stod(xyz[0]), stod(xyz[1]), stod(xyz[2])));
-        // cout << "\tAdded " + posNode.as<string>() << endl;
+        //cout << "\tAdded " + posNode.as<string>() << endl;
     } else if(posNode.begin()->second.Type() == YAML::NodeType::Scalar){
         for(auto iter : posNode){
             double time = iter.first.as<double>();
             vector<string> xyz = splitString(iter.second.as<string>());
             topPtr->positions.push_back(yntdl::Position(time, stod(xyz[0]), stod(xyz[1]), stod(xyz[2])));
-            // cout << "\tAdded " + iter.second.as<string>() << endl;
+            //cout << "\tAdded " + iter.second.as<string>() << endl;
         }
     }
     computeAbsolutePositions(topPtr);
