@@ -35,16 +35,18 @@ Note: Tested with libyaml-cpp-dev and yaml-cpp release v0.6 as well
 After installing dependencies, from the main git directory:
 ```bash
 cmake .
-make yntdl
-sudo make install/fast
+make
+sudo make install
 ```
-This will install the yntdl shared library on your system for other programs to use. Note: running `sudo make install` without the fast option will fail due to it building the tester before the library is installed.
+This will install the yntdl shared library on your system for other programs to use.
 
 ### Testing
 After installing, it is prudent to test linking to the library.
 ```bash
-make yntdl_tester
-output/yntdl_tester
+cd tester
+cmake . # this tests cmake finding the library
+make 
+output/yntdl_tester # if the header was included, an "It Worked!" should be displayed
 ```
 
 # Pronunciation

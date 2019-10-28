@@ -63,8 +63,3 @@ install(TARGETS yntdl
 set(Tester
     src/libtest/main.cpp
 )
-
-add_executable(yntdl_tester ${Tester})
-target_compile_options(yntdl_tester PUBLIC -std=c++11 -pthread -g -Wfatal-errors -pipe)
-find_library(YNTDL_LIB yntdl)
-target_link_libraries(yntdl_tester ${YNTDL_LIB})

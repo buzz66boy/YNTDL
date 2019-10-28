@@ -1,11 +1,11 @@
 temp/*
 *.o
 *.so*
-output/*
+output
 bin/*
 *.cmake
 CMakeCache.txt
-CMakeFiles/*
+CMakeFiles
 Makefile
 settings.yaml
 install_manifest.txt
