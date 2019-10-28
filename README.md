@@ -21,7 +21,7 @@ The true power of YNTDL is the ability to instantiate network topologies inside 
 
 # Setup
 ## Dependencies
-- yaml-cpp - libyaml-cpp0.5v5
+- yaml-cpp - libyaml-cpp-dev AND libyaml-cpp0.5v5
 Note: Tested with libyaml-cpp-dev and yaml-cpp release v0.6 as well
 - CMake - cmake
 
