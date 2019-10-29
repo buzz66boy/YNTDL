@@ -28,8 +28,8 @@ Note: Tested with libyaml-cpp-dev and yaml-cpp release v0.6 as well
 - GCC - gcc
 
 ### YAML
-- Either `sudo apt install libyaml-cpp-dev` or
-- Download yaml-cpp (release v0.6) and follow the install instructions.
+- Either `sudo apt install libyaml-cpp-dev libyaml-cpp-0.5v5` or
+- Download yaml-cpp (release v0.6) and follow the install instructions. You may still need the libyaml-cpp-dev package.
 
 ### Make and Install
 After installing dependencies, from the main git directory:
