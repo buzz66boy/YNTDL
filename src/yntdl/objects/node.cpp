@@ -63,3 +63,8 @@ Iface *yntdl::Node::getIface(std::string ifaceName){
     }
     throw yntdl::YntdlException(yntdl::ErrorCode::IFACE_NOT_FOUND, ifaceName + " on Node " + name);
 }
+
+std::ostream& std::operator<<(std::ostream &out, const yntdl::Node &node){
+    out << "Node " + node.name + " of type " + (node.type == "" ? "No Type" : node.type);
+    return out;
+}

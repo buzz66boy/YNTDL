@@ -1,5 +1,6 @@
 #include <cmath>
 #include <iostream>
+#include <string>
 #include <map>
 
 #include "yntdl.h"
@@ -8,6 +9,15 @@
 
 using namespace yntdl;
 
+std::ostream& std::operator<<(std::ostream &out, const Position &pos){
+    out << "Time: " + std::to_string(pos.time);
+    out << " x: " + std::to_string(pos.x);
+    out << " y: " + std::to_string(pos.y);
+    out << " z: " + std::to_string(pos.z);
+    return out;
+}
+
+//FIXME: Remove once refs removed
 std::string Position::str(){
     return ("Time: " + std::to_string(time)
     + " x: " + std::to_string(x)
@@ -15,6 +25,7 @@ std::string Position::str(){
     + " z: " + std::to_string(z));
 }
 
+//FIXME: Remove once moved to ns3lxc
 std::string Position::ns3Str(){
     return ("Seconds(" + std::to_string(time) + "), Vector("
     + std::to_string(x) + "," 

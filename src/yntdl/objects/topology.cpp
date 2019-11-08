@@ -6,10 +6,6 @@
 
 using namespace yntdl;
 
-Topology::Topology(){
-    
-}
-
 Topology::Topology(std::shared_ptr<Topology> temp, std::string newName): Topology(temp.get()){
     name = newName;
     origName = newName;
@@ -170,6 +166,7 @@ Topology::Topology(const Topology& temp): Positionable(temp), Nameable(temp), Ad
     }
 }
 
+//FIXME: Should we delete these here? Probably due to copying
 Topology::~Topology(){
     if(ip){
         delete ip;
@@ -194,4 +191,15 @@ static int reNum(Topology *top, int curNum){
 void Topology::reNumNodes(Topology *top){
     top->curNodeNum = 0;
     reNum(top, 0);
+}
+
+std::ostream& std::operator<<(std::ostream &out, const yntdl::Topology &top){
+    out << "Topology " + top.name;
+    if(top.ip != nullptr){
+        out << " with IP: " << *top.ip;
+    }
+    if(top.subnetMask != nullptr){
+        out << " with Subnet: " << *top.subnetMask;
+    }
+    return out;
 }

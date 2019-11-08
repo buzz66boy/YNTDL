@@ -50,32 +50,32 @@ IpAddr::IpAddr(int af, int cidr){
     switch(af){
         default:
         case(AF_INET):
-            ipv4_address = UINT32_MAX << cidr;
+            ipv4_address = UINT32_MAX << (32 - cidr);
             ipv4 = true;
             break;
         case(AF_INET6):
             if(cidr > 96){
-                ipv6_address_32[0] = UINT32_MAX << (cidr - 96);
-                ipv6_address_32[1] = 0;
-                ipv6_address_32[2] = 0;
-                ipv6_address_32[3] = 0;
+                ipv6_address_32[0] = UINT32_MAX;
+                ipv6_address_32[1] = UINT32_MAX;
+                ipv6_address_32[2] = UINT32_MAX;
+                ipv6_address_32[3] = UINT32_MAX << (128 - cidr);
             }
             else if(cidr > 64){
                 ipv6_address_32[0] = UINT32_MAX;
-                ipv6_address_32[1] = UINT32_MAX << (cidr - 64);
-                ipv6_address_32[2] = 0;
+                ipv6_address_32[1] = UINT32_MAX;
+                ipv6_address_32[2] = UINT32_MAX << (96 - cidr);
                 ipv6_address_32[3] = 0;
             }
             else if(cidr > 32){
                 ipv6_address_32[0] = UINT32_MAX;
-                ipv6_address_32[1] = UINT32_MAX;
-                ipv6_address_32[2] = UINT32_MAX << (cidr - 32);
+                ipv6_address_32[1] = UINT32_MAX << (64 - cidr);
+                ipv6_address_32[2] = 0;
                 ipv6_address_32[3] = 0;
             } else {
-                ipv6_address_32[0] = UINT32_MAX;
-                ipv6_address_32[1] = UINT32_MAX;
-                ipv6_address_32[2] = UINT32_MAX;
-                ipv6_address_32[3] = UINT32_MAX << cidr;
+                ipv6_address_32[0] = UINT32_MAX << (32 - cidr);
+                ipv6_address_32[1] = 0;
+                ipv6_address_32[2] = 0;
+                ipv6_address_32[3] = 0;
             }
             ipv4 = false;
             break;
@@ -90,6 +90,22 @@ std::vector<uint32_t> IpAddr::getIpv6Addr(){
     return ret;
 }
 
+std::ostream& std::operator<<(std::ostream &out, const yntdl::IpAddr &addr){
+    char buf[INET6_ADDRSTRLEN];
+    uint32_t temp;
+    if(addr.ipv4) {
+        temp = htonl(addr.ipv4_address);
+        inet_ntop(AF_INET, &(temp), buf, INET_ADDRSTRLEN);
+    } else {
+        //Probably backwards FIXME: confirmed... this is backwards
+        inet_ntop(AF_INET6, addr.ipv6_address_8, buf, INET6_ADDRSTRLEN);
+    }
+
+    out << std::string(buf);
+    return out;
+}
+
+//FIXME: Deprecated, remove once refs removed
 std::string IpAddr::str(){
     char buf[INET6_ADDRSTRLEN];
     uint32_t temp;

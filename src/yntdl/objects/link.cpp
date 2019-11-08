@@ -62,3 +62,14 @@ void Link::reRefIfaces(Link *linkPtr){
         linkPtr->ifaces[i]->link = linkPtr;
     }
 }
+
+std::ostream& std::operator<<(std::ostream &out, const yntdl::Link &link){
+    out << "Link " + link.name + " of type " + (link.type == "" ? "No Type" : link.type);
+    if (link.bandwidth != ""){
+        out << " with bandwidth " + link.bandwidth;
+    }
+    if (link.latency != ""){
+        out << " with latency " + link.latency;
+    }
+    return out;
+}

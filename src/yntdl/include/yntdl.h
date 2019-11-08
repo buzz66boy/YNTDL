@@ -12,6 +12,29 @@
 #include "yaml-cpp/yaml.h"
 
 namespace yntdl {
+    //Forward declarations for object string conversion
+    class Position;
+    class IpAddr;
+    class Application;
+    class Iface;
+    class Topology;
+    //Forward declarations of Node and Link for Iface objects & stringifying
+    class Node;
+    class Link;
+}
+
+namespace std {
+    //declaration override of << operator for string conversion of objects
+    std::ostream& operator<<(std::ostream &out, const yntdl::Position &pos);
+    std::ostream& operator<<(std::ostream &out, const yntdl::IpAddr &addr);
+    std::ostream& operator<<(std::ostream &out, const yntdl::Application &app);
+    std::ostream& operator<<(std::ostream &out, const yntdl::Iface &iface);
+    std::ostream& operator<<(std::ostream &out, const yntdl::Node &node);
+    std::ostream& operator<<(std::ostream &out, const yntdl::Link &link);
+    std::ostream& operator<<(std::ostream &out, const yntdl::Topology &top);
+}
+
+namespace yntdl {
 
 //errorCode.h
 enum class ErrorCode {
@@ -114,6 +137,8 @@ public:
     int getCidr();
     void applyOffset(std::string);
     std::string getSubnet(IpAddr *subnetMask);
+
+    friend std::ostream& std::operator<<(std::ostream &out, const yntdl::IpAddr &addr);
 };
 
 //position.h
@@ -127,6 +152,8 @@ public:
 
     std::string str();
     std::string ns3Str();
+
+    friend std::ostream& std::operator<<(std::ostream &out, const yntdl::Position &pos);
 };
 
 class Positionable {
@@ -179,12 +206,11 @@ public:
     Application(Application *temp);
 
     void addCommand(std::string cmd, bool shouldInherit = true) {commands.push_back(std::pair<std::string, bool> (cmd, shouldInherit)); }
+
+    friend std::ostream& std::operator<<(std::ostream &out, const yntdl::Application &app);
 };
 
 //iface.h
-//Forward declarations of Node and Link for Iface objects
-class Node;
-class Link;
 class Iface : public Nameable {
 
 public:
@@ -209,6 +235,8 @@ public:
     void assignSubnetMask(IpAddr *subnetMaskAddr);
     void assignSubnetMask(int af, std::string subnetMaskStr);
     void assignSubnetMask(int af, int cidr);
+
+    friend std::ostream& std::operator<<(std::ostream &out, const yntdl::Iface &iface);
 };
 
 class IfaceProvider {
@@ -260,6 +288,8 @@ public:
     int connectIface(std::string ifaceName, yntdl::Iface *iface) override; // OVERRIDES IfaceAccepter
 
     static void reRefIfaces(Link *linkPtr);
+
+    friend std::ostream& std::operator<<(std::ostream &out, const yntdl::Link &link);
 };
 
 //node.h
@@ -283,6 +313,8 @@ public:
     void addCommand(std::string cmd, bool inherit);
 
     static void reRefIfaces(yntdl::Node*);
+
+    friend std::ostream& std::operator<<(std::ostream &out, const yntdl::Node &node);
 };
 
 //topology.h
@@ -303,7 +335,7 @@ public:
     std::map<std::string, std::shared_ptr<Node> > nodeMap;
     std::map<std::string, std::shared_ptr<Link> > linkMap;
     
-    Topology();
+    Topology() {};
     Topology(std::string name): Nameable(name) {};
     Topology(Topology *temp);
     Topology(std::shared_ptr<Topology> temp, std::string newName);
@@ -311,6 +343,8 @@ public:
     ~Topology();
 
     static void reNumNodes(Topology*);
+
+    friend std::ostream& std::operator<<(std::ostream &out, const yntdl::Topology &top);
 };
 
 //linkValidator.h

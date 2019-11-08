@@ -79,3 +79,17 @@ int yntdl::IfaceAcceptor::connectIface(std::string ifaceName, yntdl::Iface *ifac
     }
     return 0;
 }
+
+std::ostream& std::operator<<(std::ostream &out, const yntdl::Iface &iface){
+    out << "Interface " << iface.name;
+    if(iface.macAddr != ""){
+        out << " with MAC Address: " << iface.macAddr;
+    }
+    if(iface.ip != nullptr){
+        out << " with IP: " << *iface.ip;
+    }
+    if(iface.subnetMask != nullptr){
+        out << " with Subnet: " << *iface.subnetMask;
+    }
+    return out;
+}

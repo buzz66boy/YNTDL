@@ -23,3 +23,9 @@ Application::Application(Application *temp): Nameable(*temp), AdditionalTags(*te
     }
     inherit = temp->inherit;
 }
+
+std::ostream& std::operator<<(std::ostream &out, const yntdl::Application &app){
+    out << "Application " << app.name;
+    //FIXME: print all app info
+    return out;
+}
