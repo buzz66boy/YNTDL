@@ -40,6 +40,8 @@ namespace yntdl {
 enum class ErrorCode {
 //General Error Code
     FILE_NOT_FOUND,
+    NOT_ENOUGH_ARGS,
+    NO_FILE_PROVIDED,
 //Parse Error Codes
     //GENERAL
     TEMPLATE_NOT_FOUND,
@@ -301,6 +303,7 @@ public:
     std::string type;
     std::map<std::string, Iface> ifaces;
     std::vector<Application> applications;
+    // list of commands on the node, bool is an inherit flag, allowing children of this node (aka used as a template) to inherit a command
     std::vector<std::pair<std::string, bool> > commands;
     
     yntdl::Iface *getIface(std::string ifaceName) override; // OVERRIDE IfaceProvider
@@ -356,6 +359,12 @@ void validateNode(std::shared_ptr<yntdl::Node> nodePtr);
 //topologyValidator.h
 void validateTopology(yntdl::Topology *top);
 
+void printTopology(std::ostream &out, yntdl::Topology *top, int indent = 0);
+void printNode(std::ostream &out, yntdl::Node *nodePtr, int indent = 0, bool apps = true,\
+    std::string appName = "", bool ifaces = true, std::string ifaName = "", bool positions = true, double time = -1.0, bool commands = true);
+void printLink(std::ostream &out, yntdl::Link *linkPtr, int indent = 0);
+//FIXME: Add back in
+//void printTopology(std::ostream &out, std::ParsedTopology *parsedTop);
 }; //End of yntdl namespace
 
 //topologyParser.h

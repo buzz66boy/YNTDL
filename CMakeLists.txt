@@ -35,6 +35,8 @@ add_library(yntdl SHARED
         src/yntdl/validation/linkValidator.cpp
         src/yntdl/validation/nodeValidator.cpp
         src/yntdl/validation/topologyValidator.cpp
+        src/yntdl/print/topologyPrinter.cpp
+        src/yntdl/print/nodePrinter.cpp
 )
 
 target_compile_options(yntdl PUBLIC -std=c++11 -pthread -g -Wfatal-errors -pipe)
@@ -58,8 +60,4 @@ target_link_libraries(yntdl ${YAML_LIB})
 install(TARGETS yntdl
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-)
-
-set(Tester
-    src/libtest/main.cpp
 )

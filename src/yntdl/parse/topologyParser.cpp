@@ -63,6 +63,7 @@ yntdl::Topology parseTopologyFile(std::string topPath){
 	parsedTop.topology.name = topName;
     parsedTop.topology.origName = topName;
 	parseTopology(topology, &parsedTop);
+    yntdl::Topology::reNumNodes(&parsedTop.topology);
 	return parsedTop.topology;
 }
 

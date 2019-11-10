@@ -81,7 +81,7 @@ int yntdl::IfaceAcceptor::connectIface(std::string ifaceName, yntdl::Iface *ifac
 }
 
 std::ostream& std::operator<<(std::ostream &out, const yntdl::Iface &iface){
-    out << "Interface " << iface.name;
+    out << "Interface " << iface.name << " of Node " << iface.node->name;
     if(iface.macAddr != ""){
         out << " with MAC Address: " << iface.macAddr;
     }
