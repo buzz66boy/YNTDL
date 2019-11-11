@@ -5,9 +5,11 @@
 
 using namespace std;
 
-int main() {
+int main(int argc, char *argv[]) {
     cout << "it worked!" << endl;
-    
+    if(argc > 1){
+        yntdl::Topology topology = parseTopologyFile(argv[1]);
+    }
     // yntdl::Node node("test");
     // yntdl::Position pos(0,1,2,3);
     

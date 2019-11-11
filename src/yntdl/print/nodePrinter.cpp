@@ -11,7 +11,9 @@ void yntdl::printNode(std::ostream &out, yntdl::Node *nodePtr, int indent, bool 
     string ind2(indent + 1, '\t');
     string ind3(indent + 2, '\t');
 
-    out << ind << " - " << *nodePtr << '\n';
+    if(ifaName == "" && appName == ""){
+        out << ind << " - " << *nodePtr << '\n';
+    }
 
     if(ifaces){
         if(nodePtr->ifaces.size() > 0){
@@ -26,13 +28,13 @@ void yntdl::printNode(std::ostream &out, yntdl::Node *nodePtr, int indent, bool 
                 }
             } else {
                 //print only specified interface
-                if(nodePtr->ifaces.find(ifaName) != nodePtr->ifaces.end()){
-                    out << ind2 << " - " << nodePtr->ifaces[ifaName] << '\n';
-                    if(nodePtr->ifaces[ifaName].link != nullptr){
-                        out << ind3 << "Connected to " << *nodePtr->ifaces[ifaName].link << '\n';
+                for(auto ifaPair : nodePtr->ifaces){
+                    if(ifaPair.first.find(ifaName) != std::string::npos){
+                        out << ind << " - " << ifaPair.second << '\n';
+                        if(ifaPair.second.link != nullptr){
+                            out << ind2 << "Connected to " << *ifaPair.second.link << '\n';
+                        }
                     }
-                } else {
-                    //iface of that name not found
                 }
             }
         } else {
@@ -57,7 +59,8 @@ void yntdl::printNode(std::ostream &out, yntdl::Node *nodePtr, int indent, bool 
             } else {
                 //print specific app
                 for(auto app : nodePtr->applications){
-                    if(app.name == appName){
+                    if(app.name.find(appName) != std::string::npos){
+                        out << ind << " - " << *nodePtr << '\n';
                         out << ind2 << " - " << app << '\n';
                         if(app.commands.size() > 0){
                             out << ind3 << "App Commands:\n";
@@ -90,7 +93,7 @@ void yntdl::printNode(std::ostream &out, yntdl::Node *nodePtr, int indent, bool 
                 }
             } else {
                 //print position at time
-                out << ind2 << " - " << nodePtr->getPosition(time) << '\n';
+                out << ind2 << "Position @ " << nodePtr->getPosition(time) << '\n';
             }
         }
     }

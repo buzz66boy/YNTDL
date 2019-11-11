@@ -63,7 +63,7 @@ std::vector<std::shared_ptr<yntdl::Topology> > parseSubTopology(YAML::Node node,
                 YAML::Node baseNode = (node[TAG_POSITION]) ? node[TAG_POSITION] : node[pluralize(TAG_POSITION)];
                 if(iters > 1 && baseNode[name]){
                     parsePositions(baseNode[name], topPtr.get());
-                } else if(baseNode.Type() == YAML::NodeType::Scalar){
+                } else {
                     parsePositions(baseNode, topPtr.get());
                 }
             }

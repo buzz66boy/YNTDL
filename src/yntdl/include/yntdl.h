@@ -359,10 +359,12 @@ void validateNode(std::shared_ptr<yntdl::Node> nodePtr);
 //topologyValidator.h
 void validateTopology(yntdl::Topology *top);
 
-void printTopology(std::ostream &out, yntdl::Topology *top, int indent = 0);
+void printTopology(std::ostream &out, yntdl::Topology *top, int indent = 0, bool nodes = true, std::string nodeName = "", bool links = true,\
+    std::string linkName = "", bool apps = true, std::string appName = "", bool ifaces = true, std::string ifaName = "",\
+    bool positions = true, double time = -1.0, bool commands = true);
 void printNode(std::ostream &out, yntdl::Node *nodePtr, int indent = 0, bool apps = true,\
     std::string appName = "", bool ifaces = true, std::string ifaName = "", bool positions = true, double time = -1.0, bool commands = true);
-void printLink(std::ostream &out, yntdl::Link *linkPtr, int indent = 0);
+void printLink(std::ostream &out, yntdl::Link *linkPtr, int indent = 0, bool ifaces = true, std::string ifaceName = "");
 //FIXME: Add back in
 //void printTopology(std::ostream &out, std::ParsedTopology *parsedTop);
 }; //End of yntdl namespace
