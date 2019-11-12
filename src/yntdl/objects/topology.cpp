@@ -11,14 +11,14 @@ Topology::Topology(std::shared_ptr<Topology> temp, std::string newName): Topolog
     origName = newName;
 }
 
-static Link *findLink(Topology *top, std::string linkName){
+static Link *findLinkPtr(Topology *top, std::string linkName){
     for(auto linkPtr : top->links){
         if(linkPtr->name == linkName){
             return linkPtr.get();
         }
     }
     for(auto topPtr : top->subTopologies){
-        Link *ln = findLink(topPtr.get(), linkName);
+        Link *ln = findLinkPtr(topPtr.get(), linkName);
         if(ln != nullptr){
             return ln;
         }
@@ -26,14 +26,14 @@ static Link *findLink(Topology *top, std::string linkName){
     return nullptr;
 }
 
-static yntdl::Node *findNode(Topology *top, std::string nodeName){
+static yntdl::Node *findNodePtr(Topology *top, std::string nodeName){
     for(auto nodePtr : top->nodes){
         if(nodePtr->name == nodeName){
             return nodePtr.get();
         }
     }
     for(auto topPtr : top->subTopologies){
-        yntdl::Node *n = findNode(topPtr.get(), nodeName);
+        yntdl::Node *n = findNodePtr(topPtr.get(), nodeName);
         if(n != nullptr){
             return n;
         }
@@ -80,7 +80,7 @@ Topology::Topology(Topology *temp): Nameable(*temp), Positionable(*temp), Additi
         for(i = 0; i < linkPtr->ifaces.size(); ++i){
             // std::cout << std::to_string(i) << std::endl;
             Iface *ifacePtr = linkPtr->ifaces[i];
-            Node *foundNode = findNode(this, ifacePtr->node->name);
+            Node *foundNode = findNodePtr(this, ifacePtr->node->name);
             if(!foundNode){
                 throw yntdl::YntdlException(yntdl::ErrorCode::NODE_NOT_FOUND, ifacePtr->node->name);
             }

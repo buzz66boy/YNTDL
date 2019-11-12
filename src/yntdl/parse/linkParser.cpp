@@ -10,11 +10,11 @@
 
 using namespace std;
 
-bool doesLinkExist(YAML::Node node, ParsedTopology *top){
+bool yntdl::doesLinkExist(YAML::Node node, yntdl::ParsedTopology *top){
     return (top->topology.linkMap.count(node.begin()->first.as<std::string>()) > 0);
 }
 
-static void parseLinkIfacesAccepted(YAML::Node node, ParsedTopology *top, shared_ptr<yntdl::Link> linkPtr){
+static void parseLinkIfacesAccepted(YAML::Node node, yntdl::ParsedTopology *top, shared_ptr<yntdl::Link> linkPtr){
         for(size_t i = 0; i < node.size(); ++i){
             string accName = node[i].as<string>();
             top->topology.ifacesAcceptedSubNames[accName] = "";
@@ -22,7 +22,7 @@ static void parseLinkIfacesAccepted(YAML::Node node, ParsedTopology *top, shared
         }
 }
 
-void parseLink(YAML::Node node, ParsedTopology *top){
+void yntdl::parseLink(YAML::Node node, yntdl::ParsedTopology *top){
     vector<string> recognizedTags;
     std::string name = node.begin()->first.as<std::string>();
     node = node[name];
@@ -93,7 +93,7 @@ void parseLink(YAML::Node node, ParsedTopology *top){
         for(size_t i = 0; i < ifaceNode.size(); ++i){
             std::vector<std::string> split = splitString(ifaceNode[i].as<std::string>());
             cout << "\tconnecting " << split[0] << " " << split[1] << " with ip " << (split.size() > 2 ? split[2] : "") << endl;
-            shared_ptr<yntdl::IfaceProvider> provPtr = getProvider(split[0], &top->topology).lock();
+            shared_ptr<yntdl::IfaceProvider> provPtr = yntdl::getProvider(split[0], &top->topology).lock();
             yntdl::Iface *ifacePtr = provPtr->getIface(split[1]);
             if(!ifacePtr){
                 throw yntdl::YntdlException(yntdl::ErrorCode::IFACE_NOT_FOUND, split[1]);
@@ -121,6 +121,6 @@ void parseLink(YAML::Node node, ParsedTopology *top){
     }
 }
 
-void overrideLink(YAML::Node link, ParsedTopology *top){
+void overrideLink(YAML::Node link, yntdl::ParsedTopology *top){
 
 }

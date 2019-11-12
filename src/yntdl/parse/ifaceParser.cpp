@@ -10,7 +10,7 @@
 
 using namespace std;
 
-std::weak_ptr<yntdl::IfaceProvider> getProvider(string provider, yntdl::Topology *top){
+std::weak_ptr<yntdl::IfaceProvider> yntdl::getProvider(string provider, yntdl::Topology *top){
     if(top->nodeMap.count(provider) > 0){
         return top->nodeMap[provider];
     } else if(top->topMap.count(provider) > 0){
@@ -20,7 +20,7 @@ std::weak_ptr<yntdl::IfaceProvider> getProvider(string provider, yntdl::Topology
     }
 }
 
-std::weak_ptr<yntdl::IfaceAcceptor> getAcceptor(string acceptor, yntdl::Topology *top){
+std::weak_ptr<yntdl::IfaceAcceptor> yntdl::getAcceptor(string acceptor, yntdl::Topology *top){
         if(top->topMap.count(acceptor) > 0){
             return top->topMap[acceptor];
         } else if(top->linkMap.count(acceptor) > 0){
@@ -30,16 +30,16 @@ std::weak_ptr<yntdl::IfaceAcceptor> getAcceptor(string acceptor, yntdl::Topology
         }
 }
 
-void parseIfacesProvided(YAML::Node ifaces, ParsedTopology *parsedTop){
+void yntdl::parseIfacesProvided(YAML::Node ifaces, yntdl::ParsedTopology *parsedTop){
     for(auto i = 0; i < ifaces.size(); ++i){
         vector<string> split = splitString(ifaces[i].begin()->second.as<string>());
         parsedTop->topology.ifacesProvidedSubNames[ifaces[i].begin()->first.as<string>()] = split[1];
-        std::weak_ptr<yntdl::IfaceProvider> provPtr = getProvider(split[0], &parsedTop->topology);
+        std::weak_ptr<yntdl::IfaceProvider> provPtr = yntdl::getProvider(split[0], &parsedTop->topology);
         parsedTop->topology.ifacesProvided[ifaces[i].begin()->first.as<string>()] = provPtr;
     }
 }
 
-void parseAcceptedIfaces(YAML::Node acceptedIface, ParsedTopology *parsedTop){
+void yntdl::parseAcceptedIfaces(YAML::Node acceptedIface, yntdl::ParsedTopology *parsedTop){
     for(auto i = 0; i < acceptedIface.size(); ++i){
         string acceptor = acceptedIface[i].begin()->first.as<string>();
         string provider = acceptedIface[i].begin()->second.as<string>();
@@ -48,8 +48,8 @@ void parseAcceptedIfaces(YAML::Node acceptedIface, ParsedTopology *parsedTop){
         vector<string> provideSplit = splitString(provider);
 
         //Find Provider
-        shared_ptr<yntdl::IfaceProvider> provPtr = getProvider(provideSplit[0], &parsedTop->topology).lock();
-        shared_ptr<yntdl::IfaceAcceptor> accPtr = getAcceptor(acceptSplit[0], &parsedTop->topology).lock();
+        shared_ptr<yntdl::IfaceProvider> provPtr = yntdl::getProvider(provideSplit[0], &parsedTop->topology).lock();
+        shared_ptr<yntdl::IfaceAcceptor> accPtr = yntdl::getAcceptor(acceptSplit[0], &parsedTop->topology).lock();
 
         yntdl::Iface *iface = provPtr->getIface(provideSplit[1]);
         if(provideSplit.size() < 3){
@@ -66,7 +66,7 @@ void parseAcceptedIfaces(YAML::Node acceptedIface, ParsedTopology *parsedTop){
     }
 }
 
-void parseIfacesAccepted(YAML::Node ifacesAccepted, ParsedTopology *parsedTop){
+void yntdl::parseIfacesAccepted(YAML::Node ifacesAccepted, yntdl::ParsedTopology *parsedTop){
     for(auto i = 0; i < ifacesAccepted.size(); ++i){
         vector<string> split = splitString(ifacesAccepted[i].begin()->second.as<string>());
         if(split.size() > 1){
@@ -74,6 +74,6 @@ void parseIfacesAccepted(YAML::Node ifacesAccepted, ParsedTopology *parsedTop){
         } else {
             parsedTop->topology.ifacesAcceptedSubNames[ifacesAccepted[i].begin()->first.as<string>()] = "";
         }
-        parsedTop->topology.ifacesAccepted[ifacesAccepted[i].begin()->first.as<string>()] = getAcceptor(split[0], &parsedTop->topology);
+        parsedTop->topology.ifacesAccepted[ifacesAccepted[i].begin()->first.as<string>()] = yntdl::getAcceptor(split[0], &parsedTop->topology);
     }
 }

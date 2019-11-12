@@ -23,7 +23,7 @@ static void applyIpOffset(string offset, yntdl::Topology *topology){
     }
 }
 
-std::vector<std::shared_ptr<yntdl::Topology> > parseSubTopology(YAML::Node node, ParsedTopology *top){
+std::vector<std::shared_ptr<yntdl::Topology> > yntdl::parseSubTopology(YAML::Node node, yntdl::ParsedTopology *top){
     size_t iters = 1;
     std::string origName = node.begin()->first.as<std::string>();
     node = node[origName];
@@ -62,22 +62,22 @@ std::vector<std::shared_ptr<yntdl::Topology> > parseSubTopology(YAML::Node node,
             if (node[TAG_POSITION] || node[pluralize(TAG_POSITION)]){
                 YAML::Node baseNode = (node[TAG_POSITION]) ? node[TAG_POSITION] : node[pluralize(TAG_POSITION)];
                 if(iters > 1 && baseNode[name]){
-                    parsePositions(baseNode[name], topPtr.get());
+                    yntdl::parsePositions(baseNode[name], topPtr.get());
                 } else {
-                    parsePositions(baseNode, topPtr.get());
+                    yntdl::parsePositions(baseNode, topPtr.get());
                 }
             }
             if(node[TAG_ROTATION] || node[pluralize(TAG_ROTATION)]){
                 YAML::Node rotNode = (node[TAG_ROTATION]) ? node[TAG_ROTATION] : node[pluralize(TAG_ROTATION)];
                 if(rotNode.Type() == YAML::NodeType::Scalar){
-                    applyRotation(rotNode.as<int>(), topPtr.get());
+                    yntdl::applyRotation(rotNode.as<int>(), topPtr.get());
                 } else if(iters > 1 && rotNode[name]){
-                    applyRotation(rotNode[name].as<int>(), topPtr.get());
+                    yntdl::applyRotation(rotNode[name].as<int>(), topPtr.get());
                 }
             }
         } else {
-            ParsedTopology subParsedTop;
-            parseTopology(node, &subParsedTop);
+            yntdl::ParsedTopology subParsedTop;
+            yntdl::parseTopology(node, &subParsedTop);
             topPtr = make_shared<yntdl::Topology>(&subParsedTop.topology);
         }
         topList.push_back(topPtr);

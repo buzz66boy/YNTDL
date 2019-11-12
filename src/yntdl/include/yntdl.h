@@ -21,6 +21,9 @@ namespace yntdl {
     //Forward declarations of Node and Link for Iface objects & stringifying
     class Node;
     class Link;
+
+    //main function for parsing topologies
+    yntdl::Topology parseTopologyFile(std::string topPath);
 }
 
 namespace std {
@@ -367,7 +370,6 @@ void printNode(std::ostream &out, yntdl::Node *nodePtr, int indent = 0, bool app
 void printLink(std::ostream &out, yntdl::Link *linkPtr, int indent = 0, bool ifaces = true, std::string ifaceName = "");
 //FIXME: Add back in
 //void printTopology(std::ostream &out, std::ParsedTopology *parsedTop);
-}; //End of yntdl namespace
 
 //topologyParser.h
 class ParsedTopology {
@@ -379,7 +381,6 @@ public:
     std::map<std::string, std::shared_ptr<yntdl::Application> > applications;
 };
 
-yntdl::Topology parseTopologyFile(std::string topPath);
 void parseTopology(YAML::Node topology, ParsedTopology *parsedTop);
 void renameSubTopologies(yntdl::Topology *topology, std::string prefix="");
 std::shared_ptr<yntdl::Node> findNode(std::vector<std::string> search, yntdl::Topology *top);
@@ -400,11 +401,22 @@ void parseIfacesAccepted(YAML::Node ifacesAccepted, ParsedTopology *parsedTop);
 //linkParser.h
 bool doesLinkExist(YAML::Node node, ParsedTopology *top);
 void parseLink(YAML::Node link, ParsedTopology *top);
+//FIXME: this function does nothing
 void overrideLink(YAML::Node link, ParsedTopology *top);
 
 //nodeParser.h
 std::vector<std::shared_ptr<yntdl::Node> > parseNode(YAML::Node node, ParsedTopology *top);
 void parseNodeApplications(YAML::Node apps, std::shared_ptr<yntdl::Node> node);
+//positionParser.h
+void parsePositions(YAML::Node posNode, std::shared_ptr<yntdl::Node> nodePtr);
+void parsePositions(YAML::Node posNode, yntdl::Topology *topPtr);
+void applyRotation(int rotation, yntdl::Topology *topPtr);
+void computeAbsolutePositions(yntdl::Topology *top);
+
+//subTopologyParser.h
+std::vector<std::shared_ptr<yntdl::Topology> > parseSubTopology(YAML::Node node, ParsedTopology *top);
+
+}; //End of yntdl namespace
 
 //parserTags.h FIXME: Pull these tags into different file?
 // NOTE: these tags can also be used plurally (checks for tag + "s")
@@ -438,23 +450,5 @@ void parseNodeApplications(YAML::Node apps, std::shared_ptr<yntdl::Node> node);
 //Utility functions for dealing with tags and topologies
 std::string pluralize(std::string str);
 std::vector<std::string> splitString(std::string str);
-
-//positionParser.h
-void parsePositions(YAML::Node posNode, std::shared_ptr<yntdl::Node> nodePtr);
-void parsePositions(YAML::Node posNode, yntdl::Topology *topPtr);
-void applyRotation(int rotation, yntdl::Topology *topPtr);
-void computeAbsolutePositions(yntdl::Topology *top);
-
-//subTopologyParser.h
-std::vector<std::shared_ptr<yntdl::Topology> > parseSubTopology(YAML::Node node, ParsedTopology *top);
-
-//topologyPrinter.h FIXME: add logger and functions'
-/*
-void printTopology(Logger, ParsedTopology);
-void printTopology(Logger, yntdl::Topology);
-void printNode(Logger, yntdl::Node);
-void printLink(Logger, yntdl::Link);
-void printApplication(Logger, yntdl::Application);
-*/
 
 #endif

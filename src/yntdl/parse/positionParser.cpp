@@ -8,7 +8,7 @@
 
 using namespace std;
 
-void parsePositions(YAML::Node posNode, std::shared_ptr<yntdl::Node> nodePtr){
+void yntdl::parsePositions(YAML::Node posNode, std::shared_ptr<yntdl::Node> nodePtr){
     if(nodePtr->positions.size() > 0){
         nodePtr->positions.clear();
     }
@@ -26,7 +26,7 @@ void parsePositions(YAML::Node posNode, std::shared_ptr<yntdl::Node> nodePtr){
     }
 }
 
-void parsePositions(YAML::Node posNode, yntdl::Topology *topPtr){
+void yntdl::parsePositions(YAML::Node posNode, yntdl::Topology *topPtr){
     if(topPtr->positions.size() > 0){
         topPtr->positions.clear();
     }
@@ -42,13 +42,13 @@ void parsePositions(YAML::Node posNode, yntdl::Topology *topPtr){
             //cout << "\tAdded " + iter.second.as<string>() << endl;
         }
     }
-    computeAbsolutePositions(topPtr);
+    yntdl::computeAbsolutePositions(topPtr);
 }
 
-void computeAbsolutePositions(yntdl::Topology *top){
+void yntdl::computeAbsolutePositions(yntdl::Topology *top){
     for(auto topPtr : top->subTopologies){
         topPtr->centerPositionsAroundParent(top);
-        computeAbsolutePositions(topPtr.get());
+        yntdl::computeAbsolutePositions(topPtr.get());
     }
     for(auto nodePtr : top->nodes){
         nodePtr->centerPositionsAroundParent(top);
@@ -65,7 +65,7 @@ static void applyRotation2(int rotation,  yntdl::Topology *topPtr){
     }
 }
 
-void applyRotation(int rotation, yntdl::Topology *topPtr){
+void yntdl::applyRotation(int rotation, yntdl::Topology *topPtr){
     for(auto nodePtr : topPtr->nodes){
         nodePtr->rotatePositions(rotation);
     }

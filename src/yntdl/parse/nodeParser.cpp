@@ -42,7 +42,7 @@ static void parseNodeIfaces(YAML::Node ifaces, std::shared_ptr<yntdl::Node> node
     }
 }
 
-void parseNodeApplications(YAML::Node apps, std::shared_ptr<yntdl::Node> node){
+void yntdl::parseNodeApplications(YAML::Node apps, std::shared_ptr<yntdl::Node> node){
     if(node->applications.size() > 0){
         node->applications.clear();
     }
@@ -74,7 +74,7 @@ void parseNodeCommands(YAML::Node cmds, std::shared_ptr<yntdl::Node> nodePtr){
     }
 }
 
-std::vector<std::shared_ptr<yntdl::Node> > parseNode(YAML::Node node, ParsedTopology *top){
+std::vector<std::shared_ptr<yntdl::Node> > yntdl::parseNode(YAML::Node node, yntdl::ParsedTopology *top){
     size_t iters = 1;
     vector<string> recognizedTags;
     std::string origName = node.begin()->first.as<std::string>();
@@ -117,10 +117,10 @@ std::vector<std::shared_ptr<yntdl::Node> > parseNode(YAML::Node node, ParsedTopo
         }
         if(node[TAG_APPLICATION]){
             recognizedTags.push_back(TAG_APPLICATION);
-            parseNodeApplications(node[TAG_APPLICATION], nodePtr);
+            yntdl::parseNodeApplications(node[TAG_APPLICATION], nodePtr);
         } else if (node[pluralize(TAG_APPLICATION)]){
             recognizedTags.push_back(pluralize(TAG_APPLICATION));
-            parseNodeApplications(node[pluralize(TAG_APPLICATION)], nodePtr);
+            yntdl::parseNodeApplications(node[pluralize(TAG_APPLICATION)], nodePtr);
         }
         if(node[TAG_COMMAND]){
             parseNodeCommands(node[TAG_COMMAND], nodePtr);
@@ -141,17 +141,17 @@ std::vector<std::shared_ptr<yntdl::Node> > parseNode(YAML::Node node, ParsedTopo
         if(node[TAG_POSITION]){
             recognizedTags.push_back(TAG_POSITION);
             if(iters > 1 && node[TAG_POSITION][name]){
-                parsePositions(node[TAG_POSITION][name], nodePtr);
+                yntdl::parsePositions(node[TAG_POSITION][name], nodePtr);
             } else if(node[TAG_POSITION].Type() == YAML::NodeType::Scalar) {
-                parsePositions(node[TAG_POSITION], nodePtr);
+                yntdl::parsePositions(node[TAG_POSITION], nodePtr);
             }
         } else if (node[pluralize(TAG_POSITION)]){
             recognizedTags.push_back(pluralize(TAG_POSITION));
             if(iters > 1 && node[pluralize(TAG_POSITION)][name]){
                 YAML::Node baseNode = node[pluralize(TAG_POSITION)][name];
-                parsePositions(baseNode, nodePtr);
+                yntdl::parsePositions(baseNode, nodePtr);
             } else if (node[pluralize(TAG_POSITION)].Type() == YAML::NodeType::Scalar){
-                parsePositions(node[pluralize(TAG_POSITION)], nodePtr);
+                yntdl::parsePositions(node[pluralize(TAG_POSITION)], nodePtr);
             }
         }
         nodePtr->mapAdditionalTags(recognizedTags, node);

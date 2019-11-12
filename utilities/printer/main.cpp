@@ -125,7 +125,7 @@ int main(int argc, char *argv[]) {
     //redirect cout to empty string buffer (suppress output)
     cout.rdbuf(ss.rdbuf());
 
-    yntdl::Topology topology = parseTopologyFile(filename);
+    yntdl::Topology topology = yntdl::parseTopologyFile(filename);
 
     //restore cout to normal output buf
     cout.rdbuf(old);

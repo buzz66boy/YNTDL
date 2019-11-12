@@ -15,13 +15,13 @@
 
 using namespace std;
 
-static void parseIncludes(YAML::Node includes, std::string topPath, ParsedTopology *parsedTop);
-static void parseNodes(YAML::Node nodes, ParsedTopology *parsedTop);
-static void parseLinks(YAML::Node links, ParsedTopology *parsedTop);
-static void parseSubTopologies(YAML::Node topologies, ParsedTopology *parsedTop);
+static void parseIncludes(YAML::Node includes, std::string topPath, yntdl::ParsedTopology *parsedTop);
+static void parseNodes(YAML::Node nodes, yntdl::ParsedTopology *parsedTop);
+static void parseLinks(YAML::Node links, yntdl::ParsedTopology *parsedTop);
+static void parseSubTopologies(YAML::Node topologies, yntdl::ParsedTopology *parsedTop);
 
-yntdl::Topology parseTopologyFile(std::string topPath){	
-	ParsedTopology parsedTop;
+yntdl::Topology yntdl::parseTopologyFile(std::string topPath){	
+	yntdl::ParsedTopology parsedTop;
 	
 	YAML::Node topology = YAML::LoadFile(topPath);
 
@@ -62,12 +62,12 @@ yntdl::Topology parseTopologyFile(std::string topPath){
 
 	parsedTop.topology.name = topName;
     parsedTop.topology.origName = topName;
-	parseTopology(topology, &parsedTop);
+	yntdl::parseTopology(topology, &parsedTop);
     yntdl::Topology::reNumNodes(&parsedTop.topology);
 	return parsedTop.topology;
 }
 
-void parseTopology(YAML::Node topology, ParsedTopology *parsedTop){
+void yntdl::parseTopology(YAML::Node topology, yntdl::ParsedTopology *parsedTop){
 	
 	cout << "PARSING TOPOLOGY " << parsedTop->topology.name << endl;
     vector<string> recognizedTags;
@@ -97,58 +97,58 @@ void parseTopology(YAML::Node topology, ParsedTopology *parsedTop){
 
     if(topology[TAG_ACCEPT_IFACE]){
         recognizedTags.push_back(TAG_ACCEPT_IFACE);
-        parseAcceptedIfaces(topology[TAG_ACCEPT_IFACE], parsedTop);
+        yntdl::parseAcceptedIfaces(topology[TAG_ACCEPT_IFACE], parsedTop);
     } else if (topology[pluralize(TAG_ACCEPT_IFACE)]){
         recognizedTags.push_back(pluralize(TAG_ACCEPT_IFACE));
-        parseAcceptedIfaces(topology[pluralize(TAG_ACCEPT_IFACE)], parsedTop);
+        yntdl::parseAcceptedIfaces(topology[pluralize(TAG_ACCEPT_IFACE)], parsedTop);
     }
 
 	if(topology[TAG_IFACES_PROVIDED]){
         recognizedTags.push_back(TAG_IFACES_PROVIDED);
-		parseIfacesProvided(topology[TAG_IFACES_PROVIDED], parsedTop);
+		yntdl::parseIfacesProvided(topology[TAG_IFACES_PROVIDED], parsedTop);
 	}
 
 	if(topology[TAG_IFACES_ACCEPTED]){
         recognizedTags.push_back(TAG_IFACES_ACCEPTED);
-		parseIfacesAccepted(topology[TAG_IFACES_ACCEPTED], parsedTop);
+		yntdl::parseIfacesAccepted(topology[TAG_IFACES_ACCEPTED], parsedTop);
 	}
 
     if(topology[TAG_POSITION]){
         recognizedTags.push_back(TAG_POSITION);
-        parsePositions(topology[TAG_POSITION], &parsedTop->topology);
+        yntdl::parsePositions(topology[TAG_POSITION], &parsedTop->topology);
     } else if (topology[pluralize(TAG_POSITION)]){
         recognizedTags.push_back(pluralize(TAG_POSITION));
-        parsePositions(topology[pluralize(TAG_POSITION)], &parsedTop->topology);
+        yntdl::parsePositions(topology[pluralize(TAG_POSITION)], &parsedTop->topology);
     }
 
     if(topology[TAG_ROTATION].Type() == YAML::NodeType::Scalar){
         recognizedTags.push_back(TAG_ROTATION);
-        applyRotation(topology[TAG_ROTATION].as<int>(), &parsedTop->topology);
+        yntdl::applyRotation(topology[TAG_ROTATION].as<int>(), &parsedTop->topology);
     }
 
 	if(topology[TAG_APPLICATION]){
         recognizedTags.push_back(TAG_APPLICATION);
-        parseApplications(topology[TAG_APPLICATION], parsedTop);
+        yntdl::parseApplications(topology[TAG_APPLICATION], parsedTop);
     } else if (topology[pluralize(TAG_APPLICATION)]){
         recognizedTags.push_back(pluralize(TAG_APPLICATION));
-        parseApplications(topology[pluralize(TAG_APPLICATION)], parsedTop);
+        yntdl::parseApplications(topology[pluralize(TAG_APPLICATION)], parsedTop);
     }
 
     if(topology[TAG_COMMAND]){
         recognizedTags.push_back(TAG_COMMAND);
-        parseCommands(topology[TAG_COMMAND], parsedTop);
+        yntdl::parseCommands(topology[TAG_COMMAND], parsedTop);
     } else if(topology[pluralize(TAG_COMMAND)]){
         recognizedTags.push_back(pluralize(TAG_COMMAND));
-        parseCommands(topology[pluralize(TAG_COMMAND)], parsedTop);
+        yntdl::parseCommands(topology[pluralize(TAG_COMMAND)], parsedTop);
     }
 
     parsedTop->topology.mapAdditionalTags(recognizedTags, topology);
-    computeAbsolutePositions(&parsedTop->topology);
+    yntdl::computeAbsolutePositions(&parsedTop->topology);
 	cout << "DONE PARSING TOP " << parsedTop->topology.name << endl;
 
 }
 
-static void parseIncludes(YAML::Node includes, std::string topPath, ParsedTopology *parsedTop){
+static void parseIncludes(YAML::Node includes, std::string topPath, yntdl::ParsedTopology *parsedTop){
 	//Get dir of top file to search for included files
 	shared_ptr<yntdl::Topology> includedTop;
 	std::string curInclude;
@@ -161,11 +161,11 @@ static void parseIncludes(YAML::Node includes, std::string topPath, ParsedTopolo
 
         struct stat buffer;
         if(stat(searchPath.c_str(), &buffer) == 0 && !S_ISDIR(buffer.st_mode)){
-            includedTop = shared_ptr<yntdl::Topology>(new yntdl::Topology(parseTopologyFile(searchPath)));
+            includedTop = shared_ptr<yntdl::Topology>(new yntdl::Topology(yntdl::parseTopologyFile(searchPath)));
         } else {
             searchPath = searchPath = topDir + "/include/" + curInclude + ".yaml";
             if(stat(searchPath.c_str(), &buffer) == 0 && !S_ISDIR(buffer.st_mode)){
-                includedTop = shared_ptr<yntdl::Topology>(new yntdl::Topology(parseTopologyFile(searchPath)));
+                includedTop = shared_ptr<yntdl::Topology>(new yntdl::Topology(yntdl::parseTopologyFile(searchPath)));
             } else {
                 throw yntdl::YntdlException(yntdl::ErrorCode::FILE_NOT_FOUND, curInclude);
             }
@@ -182,11 +182,11 @@ static void parseIncludes(YAML::Node includes, std::string topPath, ParsedTopolo
 
     		struct stat buffer;
     		if(stat(searchPath.c_str(), &buffer) == 0 && !S_ISDIR(buffer.st_mode)){
-    			includedTop = shared_ptr<yntdl::Topology>(new yntdl::Topology(parseTopologyFile(searchPath)));
+    			includedTop = shared_ptr<yntdl::Topology>(new yntdl::Topology(yntdl::parseTopologyFile(searchPath)));
     		} else {
     			searchPath = searchPath = topDir + "/include/" + curInclude + ".yaml";
     			if(stat(searchPath.c_str(), &buffer) == 0 && !S_ISDIR(buffer.st_mode)){
-    				includedTop = shared_ptr<yntdl::Topology>(new yntdl::Topology(parseTopologyFile(searchPath)));
+    				includedTop = shared_ptr<yntdl::Topology>(new yntdl::Topology(yntdl::parseTopologyFile(searchPath)));
     			} else {
                     throw yntdl::YntdlException(yntdl::ErrorCode::FILE_NOT_FOUND, curInclude);
     			}
@@ -199,21 +199,21 @@ static void parseIncludes(YAML::Node includes, std::string topPath, ParsedTopolo
     }
 }
 
-static void parseSubTopologies(YAML::Node topologies, ParsedTopology *parsedTop){
+static void parseSubTopologies(YAML::Node topologies, yntdl::ParsedTopology *parsedTop){
 	for(auto i = 0; i < topologies.size(); ++i){
-		std::vector<std::shared_ptr<yntdl::Topology> > curTops = parseSubTopology(topologies[i], parsedTop);
+		std::vector<std::shared_ptr<yntdl::Topology> > curTops = yntdl::parseSubTopology(topologies[i], parsedTop);
 		for(shared_ptr<yntdl::Topology> curTop : curTops){
 			parsedTop->topology.subTopologies.push_back(curTop);
 			parsedTop->topology.topMap[curTop->name] = curTop;
 		}
 	}
-	renameSubTopologies(&parsedTop->topology);
+	yntdl::renameSubTopologies(&parsedTop->topology);
 }
 
-static void parseNodes(YAML::Node nodes, ParsedTopology *parsedTop){
+static void parseNodes(YAML::Node nodes, yntdl::ParsedTopology *parsedTop){
 	std::vector<shared_ptr<yntdl::Node> > curNodes;
 	for(auto i = 0; i < nodes.size(); ++i){
-		curNodes = parseNode(nodes[i], parsedTop);
+		curNodes = yntdl::parseNode(nodes[i], parsedTop);
 
 		for(auto j = 0; j < curNodes.size(); ++j){
 			if(parsedTop->topology.nodeMap.count(curNodes[j]->name) > 0){
@@ -228,13 +228,13 @@ static void parseNodes(YAML::Node nodes, ParsedTopology *parsedTop){
 	}
 }
 
-static void parseLinks(YAML::Node links, ParsedTopology *parsedTop){
+static void parseLinks(YAML::Node links, yntdl::ParsedTopology *parsedTop){
 	for(auto i = 0; i < links.size(); ++i){
-		parseLink(links[i], parsedTop);
+		yntdl::parseLink(links[i], parsedTop);
 	}
 }
 
-shared_ptr<yntdl::Node> findNode(vector<string> search, yntdl::Topology *top){
+shared_ptr<yntdl::Node> yntdl::findNode(vector<string> search, yntdl::Topology *top){
 	if(search.size() < 1){
 		throw yntdl::YntdlException(yntdl::ErrorCode::NODE_NOT_FOUND, " find node");
 	}
@@ -268,7 +268,7 @@ static void renameSubTopologies1(yntdl::Topology *topology, std::string prefix){
     }
 }
 
-void renameSubTopologies(yntdl::Topology *topology, std::string prefix){
+void yntdl::renameSubTopologies(yntdl::Topology *topology, std::string prefix){
 	for(auto subTopPtr : topology->subTopologies){
         renameSubTopologies1(subTopPtr.get(), prefix);
     }

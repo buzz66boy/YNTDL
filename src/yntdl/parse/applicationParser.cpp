@@ -18,13 +18,13 @@ static void addAppToAllNodes(yntdl::Application *app, yntdl::Topology *top){
     }
 }
 
-static void addAppToNode(yntdl::Application *application, std::string nodeName, ParsedTopology *parsedTop){
+static void addAppToNode(yntdl::Application *application, std::string nodeName, yntdl::ParsedTopology *parsedTop){
     cout << "adding application: " + application->name + " to node " + nodeName << endl;
     for(auto cmdPair : application->commands){
         cout << "\tcmd: " + cmdPair.first << endl;
     }
     vector<string> findMe = splitString(nodeName);
-    shared_ptr<yntdl::Node> nodePtr = findNode(findMe, &parsedTop->topology);
+    shared_ptr<yntdl::Node> nodePtr = yntdl::findNode(findMe, &parsedTop->topology);
     bool hasApp = false;
     yntdl::Application *appPtr;
     for(size_t i = 0; i < nodePtr->applications.size(); ++i){
@@ -48,7 +48,7 @@ static void addAppToNode(yntdl::Application *application, std::string nodeName, 
     }
 }
 
-static void parseMappedApplication(YAML::Node mapNode, string appName, ParsedTopology *parsedTop){
+static void parseMappedApplication(YAML::Node mapNode, string appName, yntdl::ParsedTopology *parsedTop){
     vector<string> recognizedTags;
     if(mapNode[TAG_ALL]){
         recognizedTags.push_back(TAG_ALL);
@@ -112,7 +112,7 @@ static void parseMappedApplication(YAML::Node mapNode, string appName, ParsedTop
     }
 }
 
-void parseApplications(YAML::Node apps, ParsedTopology *parsedTop){
+void yntdl::parseApplications(YAML::Node apps, yntdl::ParsedTopology *parsedTop){
     for(size_t i = 0; i < apps.size(); ++i){
         string appName = apps[i].begin()->first.as<string>();
         switch(apps[i].begin()->second.Type()){
