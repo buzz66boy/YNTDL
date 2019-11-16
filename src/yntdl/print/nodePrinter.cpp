@@ -11,9 +11,7 @@ void yntdl::printNode(std::ostream &out, yntdl::Node *nodePtr, int indent, bool 
     string ind2(indent + 1, '\t');
     string ind3(indent + 2, '\t');
 
-    if(ifaName == "" && appName == ""){
-        out << ind << " - " << *nodePtr << '\n';
-    }
+    out << ind << " - " << *nodePtr << '\n';
 
     if(ifaces){
         if(nodePtr->ifaces.size() > 0){
@@ -30,9 +28,9 @@ void yntdl::printNode(std::ostream &out, yntdl::Node *nodePtr, int indent, bool 
                 //print only specified interface
                 for(auto ifaPair : nodePtr->ifaces){
                     if(ifaPair.first.find(ifaName) != std::string::npos){
-                        out << ind << " - " << ifaPair.second << '\n';
+                        out << ind2 << " - " << ifaPair.second << '\n';
                         if(ifaPair.second.link != nullptr){
-                            out << ind2 << "Connected to " << *ifaPair.second.link << '\n';
+                            out << ind3 << "Connected to " << *ifaPair.second.link << '\n';
                         }
                     }
                 }
@@ -60,12 +58,11 @@ void yntdl::printNode(std::ostream &out, yntdl::Node *nodePtr, int indent, bool 
                 //print specific app
                 for(auto app : nodePtr->applications){
                     if(app.name.find(appName) != std::string::npos){
-                        out << ind << " - " << *nodePtr << '\n';
-                        out << ind2 << " - " << app << '\n';
+                        out << ind3 << " - " << app << '\n';
                         if(app.commands.size() > 0){
-                            out << ind3 << "App Commands:\n";
+                            out << ind3 << "\tApp Commands:\n";
                             for(auto cmdPair : app.commands){
-                                out << ind3 << " - " << cmdPair.first << '\n';
+                                out << ind3 << "\t- " << cmdPair.first << '\n';
                             }
                         }
                         break;

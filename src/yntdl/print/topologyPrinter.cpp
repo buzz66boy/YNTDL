@@ -31,41 +31,45 @@ void yntdl::printLink(std::ostream &out, yntdl::Link *linkPtr, int indent, bool 
 void yntdl::printTopology(std::ostream &out, yntdl::Topology *top, int indent, bool nodes, string nodeName, bool links,\
     string linkName, bool apps, string appName, bool ifaces, string ifaName, bool positions, double time, bool commands){
     string ind(indent, '\t');
-    string ind2(indent + 1, '\t');
+    string nind = ind;
 
     int newIndent = indent;
 
     if(((linkName == "" && nodeName == "") || (nodes && links)) && appName == "" && ifaName == ""){
         newIndent = indent + 1;
+        nind = string(newIndent, '\t');
         out << ind << "Topology " << top->name << '\n';
         if(top->ip != nullptr){
-            out << ind2 << "Ip: " << *top->ip << '\n';
+            out << nind << "Ip: " << *top->ip << '\n';
         }
         if(top->subnetMask != nullptr){
-            out << ind2 << "Subnet Mask: " << *top->subnetMask << '\n';
+            out << nind << "Subnet Mask: " << *top->subnetMask << '\n';
         }
         if(positions){
             if(time < 0){
                 if(top->positions.size() > 0){
-                    out << ind2 << "Positions:\n";
+                    out << nind << "Positions:\n";
                     for(auto pos : top->positions){
-                        out << ind2 << " - " << pos << '\n';
+                        out << nind << " - " << pos << '\n';
                     }
                 }
             } else {
-                out << ind2 << top->getPosition(time) << '\n';
+                out << nind << top->getPosition(time) << '\n';
             }
         }
     }   
     if(links){
         if(linkName == ""){
             if(top->links.size() > 0){
-                out << ind2 << "Links:\n";
+                out << nind << "Links:\n";
                 for(auto linkPtr : top->links){
                     yntdl::printLink(out, linkPtr.get(), newIndent, ifaces, ifaName);
                 }
             }
         } else if(top->links.size() > 0){
+            if(nodes && nodeName == ""){
+                out << nind << "Links:\n";
+            }
             for(auto linkPtr : top->links){
                 if(linkPtr->name.find(linkName) != std::string::npos){
                     yntdl::printLink(out, linkPtr.get(), newIndent, ifaces, ifaName);
@@ -77,13 +81,16 @@ void yntdl::printTopology(std::ostream &out, yntdl::Topology *top, int indent, b
         if(nodeName == ""){
             if(top->nodes.size() > 0){
                 if(ifaName == "" && appName == ""){
-                    out << ind2 << "Nodes:\n";
+                    out << nind << "Nodes:\n";
                 }
                 for(auto nodePtr : top->nodes){
                     yntdl::printNode(out, nodePtr.get(), newIndent, apps, appName, ifaces, ifaName, positions, time, commands);
                 }
             }
         } else if(top->nodes.size() > 0){
+            if(links && linkName == ""){
+                out << nind << "Nodes:\n";
+            }
             for(auto nodePtr : top->nodes){
                 if(nodePtr->name.find(nodeName) != std::string::npos){
                     yntdl::printNode(out, nodePtr.get(), newIndent, apps, appName, ifaces, ifaName, positions, time, commands);
