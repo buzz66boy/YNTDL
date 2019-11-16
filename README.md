@@ -23,13 +23,20 @@ The true power of YNTDL is the ability to instantiate network topologies inside 
 ## Dependencies
 - yaml-cpp - libyaml-cpp-dev AND libyaml-cpp0.5v5
 Note: Tested with libyaml-cpp-dev and yaml-cpp release v0.6 as well
+
 - CMake - cmake
+
+- Make - make
 
 - GCC - gcc
 
 ### YAML
+#### Ubuntu
 - Either `sudo apt install libyaml-cpp-dev libyaml-cpp-0.5v5` or
 - Download yaml-cpp (release v0.6) and follow the install instructions. You may still need the libyaml-cpp-dev package.
+
+#### Fedora & Red Hat
+`sudo dnf install yaml-cpp yaml-cpp-devel`
 
 ### Make and Install
 After installing dependencies, from the main git directory:
@@ -41,13 +48,16 @@ sudo make install
 This will install the yntdl shared library on your system for other programs to use.
 
 ### Testing
-After installing, it is prudent to test linking to the library.
+After installing, it is prudent to test linking to the library. You can do this with the tester utility or the print utility.
 ```bash
-cd tester
+cd utilities
 cmake . # this tests cmake finding the library
 make 
-output/yntdl_tester # if the header was included, an "It Worked!" should be displayed
+output/test_yntdl # if the header was included, an "it worked!" should be displayed
 ```
+
+### Printing a Topology
+A topology printer is included in the utilities directory (and is built via the same cmake file as the tester). Refer to the README located in the utilities/printer directory for a detailed usage guide.
 
 # Pronunciation
 Should this "language" be adopted by a substantial following, it is important that the calamity of the word "gif" not be repeated. You may pronounce this language's name/abbreviation as you like, "Entitle", "En-tidal", "Young-teedle", have at it.
