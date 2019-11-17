@@ -19,7 +19,7 @@ static void parseNodeIfaces(YAML::Node ifaces, std::shared_ptr<yntdl::Node> node
     }
     if(ifaces.size() > 0){
         for(size_t i = 0; i < ifaces.size(); ++i){
-            vector<string> ifaceNameMac = splitString(ifaces[i].as<std::string>());
+            vector<string> ifaceNameMac = yntdl::splitString(ifaces[i].as<std::string>());
             std::string name = ifaceNameMac[0];
             cout << "\t\t- " << name << endl;
             node->ifaces[name] = yntdl::Iface(name, node.get());
@@ -30,7 +30,7 @@ static void parseNodeIfaces(YAML::Node ifaces, std::shared_ptr<yntdl::Node> node
             }
         }
     } else {
-        vector<string> ifaceNameMac = splitString(ifaces.as<std::string>());
+        vector<string> ifaceNameMac = yntdl::splitString(ifaces.as<std::string>());
         std::string name = ifaceNameMac[0];
         cout << "\t\t- " << name << endl;
         node->ifaces[name] = yntdl::Iface(name, node.get());

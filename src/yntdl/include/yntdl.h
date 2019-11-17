@@ -416,6 +416,10 @@ void computeAbsolutePositions(yntdl::Topology *top);
 //subTopologyParser.h
 std::vector<std::shared_ptr<yntdl::Topology> > parseSubTopology(YAML::Node node, ParsedTopology *top);
 
+//Utility functions for dealing with tags and topologies
+std::string pluralize(std::string str);
+std::vector<std::string> splitString(std::string str);
+
 }; //End of yntdl namespace
 
 //parserTags.h FIXME: Pull these tags into different file?
@@ -446,9 +450,5 @@ std::vector<std::shared_ptr<yntdl::Topology> > parseSubTopology(YAML::Node node,
 #define TAG_SUBNET_MASK "subnetMask"
 #define TAG_TYPE "type"
 #define TAG_OFFSET "offset"
-
-//Utility functions for dealing with tags and topologies
-std::string pluralize(std::string str);
-std::vector<std::string> splitString(std::string str);
 
 #endif
