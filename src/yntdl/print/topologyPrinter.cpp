@@ -7,8 +7,9 @@ using namespace std;
 void yntdl::printLink(std::ostream &out, yntdl::Link *linkPtr, int indent, bool ifaces, std::string ifaceName){
     string ind(indent, '\t');
     string ind2(indent + 1, '\t');
-
-    out << ind << " - " << *linkPtr << '\n';
+    if(ifaceName == ""){
+        out << ind << " - " << *linkPtr << '\n';
+    }
     if(ifaces && linkPtr->ifaces.size() > 0){
         if(ifaceName == ""){
             //print all ifaces
@@ -20,6 +21,7 @@ void yntdl::printLink(std::ostream &out, yntdl::Link *linkPtr, int indent, bool 
             //print specific iface
             for(auto ifacePtr : linkPtr->ifaces){
                 if(ifacePtr->name.find(ifaceName) != std::string::npos){
+                    out << ind << " - " << *linkPtr << '\n';
                     out << ind2 << "Connected Interface:\n";
                     out << ind2 << " - " << *ifacePtr << '\n';
                 }
