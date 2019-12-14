@@ -30,9 +30,10 @@ void yntdl::printNode(std::ostream &out, yntdl::Node *nodePtr, int indent, bool 
                 //print only specified interface
                 for(auto ifaPair : nodePtr->ifaces){
                     if(ifaPair.first.find(ifaName) != std::string::npos){
-                        out << ind << " - " << ifaPair.second << '\n';
+                        out << ind << " - " << *nodePtr << '\n';
+                        out << ind2 << " - " << ifaPair.second << '\n';
                         if(ifaPair.second.link != nullptr){
-                            out << ind2 << "Connected to " << *ifaPair.second.link << '\n';
+                            out << ind3 << "Connected to " << *ifaPair.second.link << '\n';
                         }
                     }
                 }

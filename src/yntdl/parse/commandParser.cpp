@@ -20,10 +20,10 @@ static void addCommandToTopology(std::string cmd, bool inherit, yntdl::Topology 
 static void parseCommandMap(YAML::Node cmds, yntdl::ParsedTopology *parsedTop, bool inherit){
     for(auto cmdPair : cmds){
         string key = cmdPair.first.as<string>();
-        if(key == TAG_INHERIT || key == pluralize(TAG_INHERIT)){
+        if(key == TAG_INHERIT || key == yntdl::pluralize(TAG_INHERIT)){
             continue;
         }
-        vector<string> findMe = splitString(key);
+        vector<string> findMe = yntdl::splitString(key);
         shared_ptr<yntdl::Node> nodePtr = yntdl::findNode(findMe, &parsedTop->topology);
         switch(cmdPair.second.Type()){
             default:
@@ -68,8 +68,8 @@ void yntdl::parseCommands(YAML::Node cmds, yntdl::ParsedTopology *parsedTop){
         YAML::Node inheritNode;
         if(cmds[TAG_INHERIT]){
             inheritNode = cmds[TAG_INHERIT];
-        } else if (cmds[pluralize(TAG_INHERIT)]){
-            inheritNode = cmds[pluralize(TAG_INHERIT)];
+        } else if (cmds[yntdl::pluralize(TAG_INHERIT)]){
+            inheritNode = cmds[yntdl::pluralize(TAG_INHERIT)];
         }
         if(inheritNode.Type() == YAML::NodeType::Scalar){
             inherit = inheritNode.as<bool>();

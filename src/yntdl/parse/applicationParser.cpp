@@ -23,7 +23,7 @@ static void addAppToNode(yntdl::Application *application, std::string nodeName, 
     for(auto cmdPair : application->commands){
         cout << "\tcmd: " + cmdPair.first << endl;
     }
-    vector<string> findMe = splitString(nodeName);
+    vector<string> findMe = yntdl::splitString(nodeName);
     shared_ptr<yntdl::Node> nodePtr = yntdl::findNode(findMe, &parsedTop->topology);
     bool hasApp = false;
     yntdl::Application *appPtr;
@@ -59,25 +59,25 @@ static void parseMappedApplication(YAML::Node mapNode, string appName, yntdl::Pa
         }
         addAppToAllNodes(&app, &parsedTop->topology);
     }
-    if(!mapNode[TAG_NODE] && !mapNode[pluralize(TAG_NODE)] && !mapNode[TAG_ALL]){
+    if(!mapNode[TAG_NODE] && !mapNode[yntdl::pluralize(TAG_NODE)] && !mapNode[TAG_ALL]){
         throw yntdl::YntdlException(yntdl::ErrorCode::NODE_NOT_SPECIFIED, appName);
     }
     bool inherit = true;
     if(mapNode[TAG_INHERIT]){
         recognizedTags.push_back(TAG_INHERIT);
         inherit = mapNode[TAG_INHERIT].as<bool>();
-    } else if(mapNode[pluralize(TAG_INHERIT)]){
-        recognizedTags.push_back(pluralize(TAG_INHERIT));
-        inherit = mapNode[pluralize(TAG_INHERIT)].as<bool>();
+    } else if(mapNode[yntdl::pluralize(TAG_INHERIT)]){
+        recognizedTags.push_back(yntdl::pluralize(TAG_INHERIT));
+        inherit = mapNode[yntdl::pluralize(TAG_INHERIT)].as<bool>();
     }
     yntdl::Application app(appName, inherit);
     YAML::Node cmdTag;
     if(mapNode[TAG_COMMAND]){
         recognizedTags.push_back(TAG_COMMAND);
         cmdTag = mapNode[TAG_COMMAND];
-    } else if(mapNode[pluralize(TAG_COMMAND)]){
-        recognizedTags.push_back(pluralize(TAG_COMMAND));
-        cmdTag = mapNode[pluralize(TAG_COMMAND)];
+    } else if(mapNode[yntdl::pluralize(TAG_COMMAND)]){
+        recognizedTags.push_back(yntdl::pluralize(TAG_COMMAND));
+        cmdTag = mapNode[yntdl::pluralize(TAG_COMMAND)];
     }
     if(cmdTag.Type() == YAML::NodeType::Scalar){
         app.addCommand(cmdTag.as<string>(), inherit);
@@ -91,9 +91,9 @@ static void parseMappedApplication(YAML::Node mapNode, string appName, yntdl::Pa
     if(mapNode[TAG_NODE]){
         recognizedTags.push_back(TAG_NODE);
         nodeTag = mapNode[TAG_NODE];
-    } else if (mapNode[pluralize(TAG_NODE)]) {
-        recognizedTags.push_back(pluralize(TAG_NODE));
-        nodeTag = mapNode[pluralize(TAG_NODE)];
+    } else if (mapNode[yntdl::pluralize(TAG_NODE)]) {
+        recognizedTags.push_back(yntdl::pluralize(TAG_NODE));
+        nodeTag = mapNode[yntdl::pluralize(TAG_NODE)];
     }
     if(nodeTag.Type() != YAML::NodeType::Null){
         for(auto node : nodeTag){
